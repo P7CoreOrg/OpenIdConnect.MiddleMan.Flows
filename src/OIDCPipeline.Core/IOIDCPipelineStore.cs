@@ -9,6 +9,5 @@ namespace OIDCPipeline.Core
         Task StoreDownstreamIdTokenResponse(string key, IdTokenResponse response);
         Task<IdTokenResponse> GetDownstreamIdTokenResponse(string key);
         Task DeleteStoredCacheAsync(string key);
-       
     }
 }

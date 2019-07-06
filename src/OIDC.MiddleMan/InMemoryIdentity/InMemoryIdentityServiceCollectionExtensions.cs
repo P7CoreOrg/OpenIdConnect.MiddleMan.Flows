@@ -91,14 +91,19 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                     options.ClientSecret = record.ClientSecret;
                     options.SaveTokens = true;
                  
-                    options.Events.OnRedirectToIdentityProvider = context =>
+                    options.Events.OnRedirectToIdentityProvider = async context =>
                     {
                         var session = context.HttpContext.Session;
-                        var stored = context.Request.GetJsonCookie<IdTokenAuthorizationRequest>(session.GetSessionId());
+                        var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
+                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(session.GetSessionId());
+                        
                         if (stored != null)
                         {
                             context.ProtocolMessage.ClientId = stored.client_id;
-                            context.ProtocolMessage.ClientSecret = stored.client_secret;
+                            context.Options.ClientId = stored.client_id;
+                            var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IClientSecretStore>();
+                            context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme, stored.client_id);
+
                         }
                       
                         if (record.AdditionalProtocolScopes != null && record.AdditionalProtocolScopes.Any())
@@ -122,7 +127,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             context.ProtocolMessage.AcrValues = "v1=google";
                         }
                         */
-                        return Task.CompletedTask;
+                       
                     };
                     options.Events.OnRemoteFailure = context =>
                     {

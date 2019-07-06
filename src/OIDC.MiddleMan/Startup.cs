@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OIDC.ReferenceWebClient.Data;
 using OIDC.ReferenceWebClient.Discovery;
 using OIDC.ReferenceWebClient.InMemoryIdentity;
+using OIDCPipeline.Core;
 using OIDCPipeline.Core.Extensions;
 
 namespace OIDC.ReferenceWebClient
@@ -34,6 +35,14 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var section = Configuration.GetSection("clientSecrets");
+            var clientSecrets = new Dictionary<string, string>();
+            section.Bind(clientSecrets);
+
+            services.AddTransient<IClientSecretStore>(sp =>
+            {
+                return new InMemoryClientSecretStore(clientSecrets);
+            });
             services.AddHttpClient();
             services.AddGoogleDiscoveryCache();
             services.AddOIDCSessionPipelineStore();
