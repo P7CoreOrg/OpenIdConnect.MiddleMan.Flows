@@ -1,5 +1,5 @@
 # OpenIdConnect.MiddleMan.Flows
-Sometimes just logging in isn't enough
+Sometimes just doing a login isn't enough
 
 The OIDC.MiddleMan app calls googles [Discovery Document](https://accounts.google.com/.well-known/openid-configuration), replaces the authorization_endpoint with our own.  We are telling clients that we are the authority and thanks to the fact that the response lets us point to other endpoints helps.
 
