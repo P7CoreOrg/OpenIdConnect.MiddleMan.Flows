@@ -36,6 +36,7 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+          
             var section = Configuration.GetSection("clientSecrets");
             var clientSecrets = new Dictionary<string, string>();
             section.Bind(clientSecrets);
@@ -49,7 +50,10 @@ namespace OIDC.ReferenceWebClient
             services.AddMemoryCacheOIDCPipelineStore(options=> {
                 options.ExpirationMinutes = 30;
             });
-            services.AddOIDCPipeline();
+            services.AddOIDCPipeline(options =>
+            {
+                options.DownstreamAuthority = "https://accounts.google.com";
+            });
 
             services.Configure<CookiePolicyOptions>(options =>
             {

@@ -23,37 +23,26 @@ namespace OIDC.ReferenceWebClient.Controllers
     [Route("")]
     public class OIDCController : ControllerBase
     {
-        private IGoogleDiscoveryCache _googleDiscoveryCache;
+       
         private SignInManager<ApplicationUser> _signInManager;
         private ILogger<OIDCController> _logger;
         private IOIDCPipelineStore _oidcPipelineStore;
         private IAuthorizeRequestValidator _authorizeRequestValidator;
 
         public OIDCController(
-            IGoogleDiscoveryCache googleDiscoveryCache,
+           
             SignInManager<ApplicationUser> signInManager,
             IOIDCPipelineStore oidcPipelineStore,
             IAuthorizeRequestValidator authorizeRequestValidator,
             ILogger<OIDCController> logger)
         {
-            _googleDiscoveryCache = googleDiscoveryCache;
+            
             _signInManager = signInManager;
             _logger = logger;
             _oidcPipelineStore = oidcPipelineStore;
             _authorizeRequestValidator = authorizeRequestValidator;
         }
-        // GET: api/OIDC
-        [HttpGet]
-        [Route(".well-known/openid-configuration")]
-        public async Task<Dictionary<string, object>> GetWellknownOpenIdConfiguration()
-        {
-            var response = await _googleDiscoveryCache.GetAsync();
-            var googleStuff = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Raw);
-            googleStuff["authorization_endpoint"]
-               = "https://localhost:5001/connect/authorize";
-
-            return googleStuff;
-        }
+        
 
         // GET: api/OIDC/5
         [HttpGet("{id}", Name = "Get")]
