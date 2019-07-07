@@ -25,7 +25,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
             var sp = Global.ServiceProvider;
             var oidcPipelineStore = sp.GetRequiredService<IOIDCPipelineStore>();
             var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
-            var original = oidcPipelineStore.GetOriginalIdTokenRequestAsync(httpContextAccessor.HttpContext.Session.GetSessionId()).GetAwaiter().GetResult();
+            var original = oidcPipelineStore.GetOriginalIdTokenRequestAsync().GetAwaiter().GetResult();
 
             if (original != null)
             {
@@ -93,9 +93,9 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                  
                     options.Events.OnRedirectToIdentityProvider = async context =>
                     {
-                        var session = context.HttpContext.Session;
+                       
                         var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
-                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(session.GetSessionId());
+                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync();
                         
                         if (stored != null)
                         {

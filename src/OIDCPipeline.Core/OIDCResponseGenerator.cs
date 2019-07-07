@@ -21,8 +21,8 @@ namespace OIDCPipeline.Core
             bool delete = true)
         {
        
-            var original = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync(key);
-            var downstream = await _oidcPipelineStore.GetDownstreamIdTokenResponse(key);
+            var original = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync();
+            var downstream = await _oidcPipelineStore.GetDownstreamIdTokenResponse();
 
             var header = new JwtHeader();
             var handler = new JwtSecurityTokenHandler();
@@ -48,7 +48,7 @@ namespace OIDCPipeline.Core
 
             if (delete)
             {
-                await _oidcPipelineStore.DeleteStoredCacheAsync(key);
+                await _oidcPipelineStore.DeleteStoredCacheAsync();
             }
             return authorizeResult;
         }

@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OIDC.ReferenceWebClient.Data;
 using OIDC.ReferenceWebClient.Discovery;
 using OIDC.ReferenceWebClient.InMemoryIdentity;
+using OIDC.ReferenceWebClient.Middleware;
 using OIDCPipeline.Core;
 using OIDCPipeline.Core.Extensions;
 
@@ -45,7 +46,9 @@ namespace OIDC.ReferenceWebClient
             });
             services.AddHttpClient();
             services.AddGoogleDiscoveryCache();
-            services.AddOIDCSessionPipelineStore();
+            services.AddMemoryCacheOIDCPipelineStore(options=> {
+                options.ExpirationMinutes = 30;
+            });
             services.AddOIDCPipeline();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -86,6 +89,7 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -102,9 +106,11 @@ namespace OIDC.ReferenceWebClient
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseOIDCPipelineStore();
             app.UseAuthentication();
             app.UseSession();
             app.UseMvc();
+
         }
     }
 }

@@ -111,8 +111,8 @@ client_id=mvc
                 state = values.Get(OidcConstants.AuthorizeRequest.State),
                 scope = values.Get(OidcConstants.AuthorizeRequest.Scope)
             };
-
-            await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(HttpContext.Session.GetSessionId(), idTokenAuthorizationRequest);
+            await _oidcPipelineStore.DeleteStoredCacheAsync();
+            await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(idTokenAuthorizationRequest);
             if (User.Identity.IsAuthenticated)
             {
                 await _signInManager.SignOutAsync();

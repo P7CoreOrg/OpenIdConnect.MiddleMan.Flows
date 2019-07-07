@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Microsoft.AspNetCore.Mvc
 {
-    public static class CookieExtensions
+    internal static class CookieExtensions
     {
         public static void SetStringCookie(this HttpResponse response, string key, string value, int? expireTime)
         {
@@ -22,10 +22,7 @@ namespace Microsoft.AspNetCore.Mvc
         {
             httpContext.Response.SetStringCookie(key, value, expireTime);
         }
-        public static void SetStringCookie(this ControllerBase controllerBase, string key, string value, int? expireTime)
-        {
-            controllerBase.Response.SetStringCookie(key, value, expireTime);
-        }
+    
         /// <summary>  
         /// set the cookie  
         /// </summary>  
@@ -40,10 +37,7 @@ namespace Microsoft.AspNetCore.Mvc
         {
             httpContext.Response.SetJsonCookie<T>(key, value, expireTime);
         }
-        public static void SetJsonCookie<T>(this ControllerBase controllerBase, string key, T value, int? expireTime)
-        {
-            controllerBase.Response.SetJsonCookie<T>(key,value,expireTime);
-        }
+      
         public static string GetStringCookie(this HttpRequest request, string key) 
         {
             //read cookie from Request object  
@@ -66,22 +60,14 @@ namespace Microsoft.AspNetCore.Mvc
             return JsonConvert.DeserializeObject<T>(cookieValueFromReq);
 
         }
-        public static T GetJsonCookie<T>(this ControllerBase controllerBase, string key) where T : class
-        {
-            //read cookie from Request object  
-            return controllerBase.Request.GetJsonCookie<T>(key);
-        }
+      
         public static T GetJsonCookie<T>(this HttpContext httpContext, string key) where T : class
         {
             //read cookie from Request object  
             return httpContext.Request.GetJsonCookie<T>(key);
         }
 
-        public static string GetStringCookie(this ControllerBase controllerBase, string key)  
-        {
-            //read cookie from Request object  
-            return controllerBase.Request.GetStringCookie(key);
-        }
+      
         public static string GetStringCookie(this HttpContext httpContext, string key)  
         {
             //read cookie from Request object  
