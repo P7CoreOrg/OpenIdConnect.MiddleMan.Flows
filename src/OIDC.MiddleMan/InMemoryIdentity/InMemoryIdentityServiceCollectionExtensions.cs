@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
-using OIDC.ReferenceWebClient.Controllers;
+
 using OIDC.ReferenceWebClient.Extensions;
 using OIDCPipeline.Core;
 using OpenIdConntectModels;

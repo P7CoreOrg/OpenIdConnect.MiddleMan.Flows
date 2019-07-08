@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 using OIDC.ReferenceWebClient.Constants;
-using OIDC.ReferenceWebClient.Controllers;
+
 using OIDC.ReferenceWebClient.Data;
 using OIDC.ReferenceWebClient.Extensions;
 using OIDC.ReferenceWebClient.Models;

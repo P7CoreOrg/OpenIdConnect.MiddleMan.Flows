@@ -55,6 +55,7 @@ namespace OIDCPipeline.Core.Extensions
             services.AddTransient<IAuthorizeRequestValidator, AuthorizeRequestValidator>();
             services.AddDownstreamDiscoveryCache();
             services.AddEndpoint<DiscoveryEndpoint>(EndpointNames.Discovery, ProtocolRoutePaths.DiscoveryConfiguration.EnsureLeadingSlash());
+            services.AddEndpoint<AuthorizeEndpoint>(EndpointNames.Authorize, ProtocolRoutePaths.Authorize.EnsureLeadingSlash());
             services.AddTransient<IEndpointRouter, EndpointRouter>();
 
         }

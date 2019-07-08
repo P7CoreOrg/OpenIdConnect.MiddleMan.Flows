@@ -36,7 +36,7 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-          
+
             var section = Configuration.GetSection("clientSecrets");
             var clientSecrets = new Dictionary<string, string>();
             section.Bind(clientSecrets);
@@ -47,14 +47,15 @@ namespace OIDC.ReferenceWebClient
             });
             services.AddHttpClient();
             services.AddGoogleDiscoveryCache();
-            services.AddMemoryCacheOIDCPipelineStore(options=> {
+            services.AddMemoryCacheOIDCPipelineStore(options =>
+            {
                 options.ExpirationMinutes = 30;
             });
             services.AddOIDCPipeline(options =>
             {
                 options.DownstreamAuthority = "https://accounts.google.com";
             });
-
+            services.AddTransient<ISigninManager, OIDCPipelineSigninManager>();
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -84,16 +85,16 @@ namespace OIDC.ReferenceWebClient
                 options.IdleTimeout = TimeSpan.FromSeconds(3600);
                 options.Cookie.HttpOnly = true;
             });
-            
+
             Global.ServiceProvider = services.BuildServiceProvider();
-            
+
             return Global.ServiceProvider;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
