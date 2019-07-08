@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using OIDCPipeline.Core.AuthorizationEndpoint;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Endpoints.Results;
+using OIDCPipeline.Core.Extensions;
 using OIDCPipeline.Core.Hosting;
 
 namespace OIDCPipeline.Core.Endpoints
@@ -81,17 +82,8 @@ namespace OIDCPipeline.Core.Endpoints
                 string redirectUrl = null;
                 if (!result.IsError)
                 {
-                    var idTokenAuthorizationRequest = new IdTokenAuthorizationRequest
-                    {
-                        client_id = values.Get(OidcConstants.AuthorizeRequest.ClientId),
-                        client_secret = values.Get("client_secret"),
-                        nonce = values.Get(OidcConstants.AuthorizeRequest.Nonce),
-                        response_mode = values.Get(OidcConstants.AuthorizeRequest.ResponseMode),
-                        redirect_uri = values.Get(OidcConstants.AuthorizeRequest.RedirectUri),
-                        response_type = values.Get(OidcConstants.AuthorizeRequest.ResponseType),
-                        state = values.Get(OidcConstants.AuthorizeRequest.State),
-                        scope = values.Get(OidcConstants.AuthorizeRequest.Scope)
-                    };
+                    var idTokenAuthorizationRequest = values.ToIdTokenAuthorizationRequest();
+
                     _logger.LogInformation($"DeleteStoredCacheAsync previouse if it exists");
                     await _oidcPipelineStore.DeleteStoredCacheAsync();
                     _logger.LogInformation($"StoreOriginalIdTokenRequestAsync clientid:{idTokenAuthorizationRequest.client_id}");

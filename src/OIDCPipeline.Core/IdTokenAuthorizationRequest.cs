@@ -1,7 +1,10 @@
-﻿namespace OIDCPipeline.Core
+﻿using System.Collections.Specialized;
+
+namespace OIDCPipeline.Core
 {
     public class IdTokenAuthorizationRequest
     {
+        public NameValueCollection ExtraValues { get; set; }
 
 
         /*

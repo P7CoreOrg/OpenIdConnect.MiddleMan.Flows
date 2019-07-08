@@ -82,6 +82,8 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             // assuming a relogin trigger, so we will make the user relogin on the IDP
                             context.ProtocolMessage.Prompt = "login";
                         }
+                        context.ProtocolMessage.SetParameter("idp_code", "DT");
+                        context.ProtocolMessage.SetParameter("custom", "{\"someCustomJson\":\"hi\"}");
                         /*
                         if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
                         {
