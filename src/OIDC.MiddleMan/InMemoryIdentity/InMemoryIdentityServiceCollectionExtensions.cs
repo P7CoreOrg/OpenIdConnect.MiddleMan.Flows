@@ -105,7 +105,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme, stored.client_id);
 
                         }
-                      
+                        context.Options.Authority = context.Options.Authority;
                         if (record.AdditionalProtocolScopes != null && record.AdditionalProtocolScopes.Any())
                         {
                             string additionalScopes = "";

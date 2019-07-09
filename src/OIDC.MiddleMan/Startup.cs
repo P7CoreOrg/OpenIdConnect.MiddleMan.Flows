@@ -17,6 +17,7 @@ using OIDC.ReferenceWebClient.InMemoryIdentity;
 using OIDC.ReferenceWebClient.Middleware;
 using OIDCPipeline.Core;
 using OIDCPipeline.Core.Extensions;
+using OpenIdConntectModels;
 
 namespace OIDC.ReferenceWebClient
 {
@@ -37,8 +38,11 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            var oAuth2SchemeRecords = new List<OAuth2SchemeRecord>();
+            var section = Configuration.GetSection("oauth2");
+            section.Bind(oAuth2SchemeRecords);
 
-            var section = Configuration.GetSection("clientSecrets");
+            section = Configuration.GetSection("clientSecrets");
             var clientSecrets = new Dictionary<string, string>();
             section.Bind(clientSecrets);
 
@@ -55,10 +59,19 @@ namespace OIDC.ReferenceWebClient
             {
                 options.ExpirationMinutes = 30;
             });
+            var downstreamAuthortityScheme = Configuration["downstreamAuthorityScheme"];
+
+            var record = (from item in oAuth2SchemeRecords
+                          where item.Scheme == downstreamAuthortityScheme
+                          select item).FirstOrDefault();
+
+
+
+
             services.AddOIDCPipeline(options =>
             {
                 //     options.DownstreamAuthority = "https://accounts.google.com";
-                options.DownstreamAuthority = "https://localhost:44305/";
+                options.DownstreamAuthority = record.Authority;
             });
             services.AddTransient<ISigninManager, OIDCPipelineSigninManager>();
             services.Configure<CookiePolicyOptions>(options =>
