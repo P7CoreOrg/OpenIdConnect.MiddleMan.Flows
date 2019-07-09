@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using OIDC.ReferenceWebClient.Discovery;
-using OIDC.ReferenceWebClient.Middleware;
 using OIDCPipeline.Core.AuthorizationEndpoint;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Endpoints;
@@ -64,12 +63,9 @@ namespace OIDCPipeline.Core.Extensions
             services.Configure(setupAction);
             services.AddTransient<IOIDCPipelineStore, MemoryCacheOIDCPipelineStore>();
         }
-       
         public static IApplicationBuilder UseOIDCPipelineStore(this IApplicationBuilder app)
         {
-            app.UseMiddleware<CookieTracerMiddleware>();
             app.UseMiddleware<OIDCPipelineMiddleware>();
-
             return app;
         }
     }

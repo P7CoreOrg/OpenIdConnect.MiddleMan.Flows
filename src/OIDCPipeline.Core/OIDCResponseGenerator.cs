@@ -16,13 +16,13 @@ namespace OIDCPipeline.Core
             _oidcPipelineStore = oidcPipelineStore;
         }
         public async Task<IActionResult> CreateIdTokenActionResultResponseAsync(
-            string key, 
+            string key,
             NameValueCollection extras = null, 
             bool delete = true)
         {
        
-            var original = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync();
-            var downstream = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync();
+            var original = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync(key);
+            var downstream = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync(key);
 
             var header = new JwtHeader();
             var handler = new JwtSecurityTokenHandler();
@@ -53,7 +53,7 @@ namespace OIDCPipeline.Core
 
             if (delete)
             {
-                await _oidcPipelineStore.DeleteStoredCacheAsync();
+                await _oidcPipelineStore.DeleteStoredCacheAsync(key);
             }
             return authorizeResult;
         }

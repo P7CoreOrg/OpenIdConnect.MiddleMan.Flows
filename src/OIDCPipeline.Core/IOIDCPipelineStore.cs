@@ -4,10 +4,10 @@ namespace OIDCPipeline.Core
 {
     public interface IOIDCPipelineStore
     {
-        Task StoreOriginalIdTokenRequestAsync(IdTokenAuthorizationRequest request);
-        Task<IdTokenAuthorizationRequest> GetOriginalIdTokenRequestAsync();
-        Task StoreDownstreamIdTokenResponseAsync(IdTokenResponse response);
-        Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync();
-        Task DeleteStoredCacheAsync();
+        Task StoreOriginalIdTokenRequestAsync(string key,IdTokenAuthorizationRequest request);
+        Task<IdTokenAuthorizationRequest> GetOriginalIdTokenRequestAsync(string key);
+        Task StoreDownstreamIdTokenResponseAsync(string key, IdTokenResponse response);
+        Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync(string key);
+        Task DeleteStoredCacheAsync(string key);
     }
 }

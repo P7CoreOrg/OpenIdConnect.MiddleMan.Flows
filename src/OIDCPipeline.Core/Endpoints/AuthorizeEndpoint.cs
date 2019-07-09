@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OIDCPipeline.Core.AuthorizationEndpoint;
 using OIDCPipeline.Core.Configuration;
@@ -35,6 +38,11 @@ namespace OIDCPipeline.Core.Endpoints
             _logger = logger;
 
 
+        }
+        internal string GenerateNonce()
+        {
+            string nonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString() + Guid.NewGuid().ToString()));
+            return DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture) + "." + nonce;
         }
         public async Task<IEndpointResult> ProcessAsync(HttpContext context)
         {
@@ -82,13 +90,19 @@ namespace OIDCPipeline.Core.Endpoints
                 string redirectUrl = null;
                 if (!result.IsError)
                 {
+                    var nonce = values.Get(OidcConstants.AuthorizeRequest.Nonce);
+                    if (string.IsNullOrWhiteSpace(nonce))
+                    {
+                        nonce = GenerateNonce();
+                        values["OidcConstants.AuthorizeRequest.Nonce"] = nonce;
+                    }
                     var idTokenAuthorizationRequest = values.ToIdTokenAuthorizationRequest();
 
                     _logger.LogInformation($"DeleteStoredCacheAsync previouse if it exists");
-                    await _oidcPipelineStore.DeleteStoredCacheAsync();
+                    await _oidcPipelineStore.DeleteStoredCacheAsync(nonce);
                     _logger.LogInformation($"StoreOriginalIdTokenRequestAsync clientid:{idTokenAuthorizationRequest.client_id}");
-                    await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(idTokenAuthorizationRequest);
-                   
+                    await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(nonce,idTokenAuthorizationRequest);
+                    context.SetStringCookie(".oidc.Nonce.Tracker", nonce, 60);
                     redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookRedirectUrl}";
 
                 }
@@ -97,6 +111,8 @@ namespace OIDCPipeline.Core.Endpoints
                     redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookErrorRedirectUrl}";
                 }
                 _logger.LogInformation($"redirecting to:{redirectUrl}");
+             
+
                 return new Results.AuthorizeResult(redirectUrl);
             }
             catch (Exception ex)

@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using OIDC.ReferenceWebClient.Data;
 using OIDC.ReferenceWebClient.Discovery;
 using OIDC.ReferenceWebClient.InMemoryIdentity;
-using OIDC.ReferenceWebClient.Middleware;
 using OIDCPipeline.Core;
 using OIDCPipeline.Core.Extensions;
 using OpenIdConntectModels;
@@ -66,8 +65,6 @@ namespace OIDC.ReferenceWebClient
                           select item).FirstOrDefault();
 
 
-
-
             services.AddOIDCPipeline(options =>
             {
                 //     options.DownstreamAuthority = "https://accounts.google.com";
@@ -112,6 +109,7 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+           
 
             if (env.IsDevelopment())
             {

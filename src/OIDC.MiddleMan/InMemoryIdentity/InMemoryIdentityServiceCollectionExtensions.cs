@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +28,9 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
             var sp = Global.ServiceProvider;
             var oidcPipelineStore = sp.GetRequiredService<IOIDCPipelineStore>();
             var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
-            var original = oidcPipelineStore.GetOriginalIdTokenRequestAsync().GetAwaiter().GetResult();
+
+            string nonce = httpContextAccessor.HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
+            var original = oidcPipelineStore.GetOriginalIdTokenRequestAsync(nonce).GetAwaiter().GetResult();
 
             if (original != null)
             {
@@ -37,7 +41,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                 }
             }
 
-            string nonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString() + Guid.NewGuid().ToString()));
+            nonce = Convert.ToBase64String(Encoding.UTF8.GetBytes(Guid.NewGuid().ToString() + Guid.NewGuid().ToString()));
             if (RequireTimeStampInNonce)
             {
                 return DateTime.UtcNow.Ticks.ToString(CultureInfo.InvariantCulture) + "." + nonce;
@@ -92,11 +96,42 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                     options.ClientSecret = record.ClientSecret;
                     options.SaveTokens = true;
                     options.TokenValidationParameters.ValidateAudience = false;
+                    options.Events.OnTokenValidated = async context =>
+                    {
+                        var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
+                       
+                        OpenIdConnectMessage oidcMessage = null;
+                        if(context.Options.ResponseType == "id_token")
+                        {
+                            oidcMessage = context.ProtocolMessage;
+                        }
+                        else
+                        {
+                            oidcMessage = context.TokenEndpointResponse;
+                        }
+                        var header = new JwtHeader();
+                        var handler = new JwtSecurityTokenHandler();
+                        var idToken = handler.ReadJwtToken(oidcMessage.IdToken);
+                        var claims = idToken.Claims.ToList();
+                        var nonce = (from item in claims where item.Type == OidcConstants.AuthorizeRequest.Nonce select item).FirstOrDefault();
+
+                        IdTokenResponse idTokenResponse = new IdTokenResponse
+                        {
+                            access_token = oidcMessage.AccessToken,
+                            expires_at = oidcMessage.ExpiresIn,
+                            id_token = oidcMessage.IdToken,
+                            refresh_token = oidcMessage.RefreshToken,
+                            token_type = oidcMessage.TokenType,
+                            LoginProvider = scheme
+                        };
+                        await pipeLineStore.StoreDownstreamIdTokenResponseAsync(nonce.Value,idTokenResponse);
+
+                    };
                     options.Events.OnRedirectToIdentityProvider = async context =>
                     {
-                       
+                        string nonce = context.HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
                         var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
-                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync();
+                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(nonce);
                         var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IClientSecretStore>();
 
                         if (stored != null)
@@ -106,6 +141,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme, stored.client_id);
 
                         }
+                     
                         context.Options.Authority = context.Options.Authority;
                         if (record.AdditionalProtocolScopes != null && record.AdditionalProtocolScopes.Any())
                         {

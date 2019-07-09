@@ -29,18 +29,19 @@ namespace OIDC.ReferenceWebClient.Pages
             IOIDCResponseGenerator oidcResponseGenerator, IOIDCPipelineStore oidcPipelineStore)
         {
             _signInManager = signInManager;
-               _oidcResponseGenerator = oidcResponseGenerator;
+            _oidcResponseGenerator = oidcResponseGenerator;
             _oidcPipelineStore = oidcPipelineStore;
         }
         public List<Claim> Claims { get; set; }
         public IdTokenResponse IdTokenResponse { get; private set; }
-      
+
         public async Task OnGet()
         {
             if (User.Identity.IsAuthenticated)
             {
-                IdTokenResponse = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync();
-      
+                string nonce = HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
+                IdTokenResponse = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync(nonce);
+
                 Claims = Request.HttpContext.User.Claims.ToList();
             }
         }
@@ -50,9 +51,8 @@ namespace OIDC.ReferenceWebClient.Pages
             {
                 ["prodInstance"] = Guid.NewGuid().ToString()
             };
-
-            var result = await _oidcResponseGenerator.CreateIdTokenActionResultResponseAsync(
-                HttpContext.Session.GetSessionId(), extras, true);
+            string nonce = HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
+            var result = await _oidcResponseGenerator.CreateIdTokenActionResultResponseAsync(nonce,extras, true);
             await _signInManager.SignOutAsync();// we don't want our loggin hanging around
             return result;
 

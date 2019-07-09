@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
-using OIDC.ReferenceWebClient.Middleware;
 using OIDCPipeline.Core.Configuration;
 using System;
 using System.Threading.Tasks;
@@ -24,38 +23,33 @@ namespace OIDCPipeline.Core
             _options = options.Value;
         }
 
-        public Task DeleteStoredCacheAsync()
+        public Task DeleteStoredCacheAsync(string id)
         {
-            string id = _httpContextAccessor.HttpContext.Items[CookieTracerMiddlewareConstants.TracerName] as string;
             _memoryCache.Remove(OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id));
             _memoryCache.Remove(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
             return Task.CompletedTask;
         }
 
-        public Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync()
+        public Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync(string id)
         {
-            string id = _httpContextAccessor.HttpContext.Items[CookieTracerMiddlewareConstants.TracerName] as string;
             var result = _memoryCache.Get<IdTokenResponse>(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
             return Task.FromResult(result);
         }
 
-        public Task<IdTokenAuthorizationRequest> GetOriginalIdTokenRequestAsync()
+        public Task<IdTokenAuthorizationRequest> GetOriginalIdTokenRequestAsync(string id)
         {
-            string id = _httpContextAccessor.HttpContext.Items[CookieTracerMiddlewareConstants.TracerName] as string;
             var result = _memoryCache.Get<IdTokenAuthorizationRequest>(OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id));
             return Task.FromResult(result);
         }
 
-        public Task StoreDownstreamIdTokenResponseAsync(IdTokenResponse response)
+        public Task StoreDownstreamIdTokenResponseAsync(string id, IdTokenResponse response)
         {
-            var id = _httpContextAccessor.HttpContext.Items[CookieTracerMiddlewareConstants.TracerName] as string;
             _memoryCache.Set(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id), response, TimeSpan.FromMinutes(_options.ExpirationMinutes));
             return Task.CompletedTask;
         }
 
-        public Task StoreOriginalIdTokenRequestAsync(IdTokenAuthorizationRequest request)
+        public Task StoreOriginalIdTokenRequestAsync(string id, IdTokenAuthorizationRequest request)
         {
-            var id = _httpContextAccessor.HttpContext.Items[CookieTracerMiddlewareConstants.TracerName] as string;
             _memoryCache.Set(OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id), request, TimeSpan.FromMinutes(_options.ExpirationMinutes));
             return Task.CompletedTask;
         }
