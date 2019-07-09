@@ -20,6 +20,7 @@ using OIDCPipeline.Core.Extensions;
 
 namespace OIDC.ReferenceWebClient
 {
+ 
     public static class Global
     {
         public static IServiceProvider ServiceProvider { get; set; }
@@ -41,9 +42,12 @@ namespace OIDC.ReferenceWebClient
             var clientSecrets = new Dictionary<string, string>();
             section.Bind(clientSecrets);
 
+            section = Configuration.GetSection("oidcOptionStore");
+            var oidcSchemeRecords = new Dictionary<string, OIDCSchemeRecord>();
+            section.Bind(oidcSchemeRecords);
             services.AddTransient<IClientSecretStore>(sp =>
             {
-                return new InMemoryClientSecretStore(clientSecrets);
+                return new InMemoryClientSecretStore(oidcSchemeRecords);
             });
             services.AddHttpClient();
             services.AddGoogleDiscoveryCache();
@@ -53,7 +57,8 @@ namespace OIDC.ReferenceWebClient
             });
             services.AddOIDCPipeline(options =>
             {
-                options.DownstreamAuthority = "https://accounts.google.com";
+                //     options.DownstreamAuthority = "https://accounts.google.com";
+                options.DownstreamAuthority = "https://localhost:44305/";
             });
             services.AddTransient<ISigninManager, OIDCPipelineSigninManager>();
             services.Configure<CookiePolicyOptions>(options =>

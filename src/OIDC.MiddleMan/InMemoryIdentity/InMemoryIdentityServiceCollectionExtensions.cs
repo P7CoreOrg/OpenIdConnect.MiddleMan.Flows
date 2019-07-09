@@ -90,18 +90,18 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                     options.ClientId = record.ClientId;
                     options.ClientSecret = record.ClientSecret;
                     options.SaveTokens = true;
-                 
+                    options.TokenValidationParameters.ValidateAudience = false;
                     options.Events.OnRedirectToIdentityProvider = async context =>
                     {
                        
                         var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
                         var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync();
-                        
+                        var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IClientSecretStore>();
+
                         if (stored != null)
                         {
                             context.ProtocolMessage.ClientId = stored.client_id;
                             context.Options.ClientId = stored.client_id;
-                            var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IClientSecretStore>();
                             context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme, stored.client_id);
 
                         }
@@ -120,6 +120,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             // assuming a relogin trigger, so we will make the user relogin on the IDP
                             context.ProtocolMessage.Prompt = "login";
                         }
+                        var allowedParams = await clientSecretStore.FetchAllowedProtocolParamatersAsync(scheme);
                         context.ProtocolMessage.SetParameter("idp_code", "DT");
                         /*
                         if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
