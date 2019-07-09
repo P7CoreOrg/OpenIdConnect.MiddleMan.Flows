@@ -6,8 +6,8 @@ namespace OIDCPipeline.Core
     {
         Task StoreOriginalIdTokenRequestAsync(IdTokenAuthorizationRequest request);
         Task<IdTokenAuthorizationRequest> GetOriginalIdTokenRequestAsync();
-        Task StoreDownstreamIdTokenResponse(IdTokenResponse response);
-        Task<IdTokenResponse> GetDownstreamIdTokenResponse();
+        Task StoreDownstreamIdTokenResponseAsync(IdTokenResponse response);
+        Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync();
         Task DeleteStoredCacheAsync();
     }
 }

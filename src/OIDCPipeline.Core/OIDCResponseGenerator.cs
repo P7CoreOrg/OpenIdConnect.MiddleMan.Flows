@@ -22,7 +22,7 @@ namespace OIDCPipeline.Core
         {
        
             var original = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync();
-            var downstream = await _oidcPipelineStore.GetDownstreamIdTokenResponse();
+            var downstream = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync();
 
             var header = new JwtHeader();
             var handler = new JwtSecurityTokenHandler();
@@ -43,7 +43,12 @@ namespace OIDCPipeline.Core
                 IdentityToken = downstream.id_token,
                 AccessToken = downstream.access_token,
                 Scope = scope?.Value
+               
             };
+            if (!string.IsNullOrWhiteSpace(original.nonce))
+            {
+                extras["nonce"] = original.nonce;
+            }
             var authorizeResult = new AuthorizeResult(authResponse,extras);
 
             if (delete)

@@ -32,7 +32,7 @@ namespace OIDCPipeline.Core
             return Task.CompletedTask;
         }
 
-        public Task<IdTokenResponse> GetDownstreamIdTokenResponse()
+        public Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync()
         {
             string id = _httpContextAccessor.HttpContext.Items[CookieTracerMiddlewareConstants.TracerName] as string;
             var result = _memoryCache.Get<IdTokenResponse>(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
@@ -46,7 +46,7 @@ namespace OIDCPipeline.Core
             return Task.FromResult(result);
         }
 
-        public Task StoreDownstreamIdTokenResponse(IdTokenResponse response)
+        public Task StoreDownstreamIdTokenResponseAsync(IdTokenResponse response)
         {
             var id = _httpContextAccessor.HttpContext.Items[CookieTracerMiddlewareConstants.TracerName] as string;
             _memoryCache.Set(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id), response, TimeSpan.FromMinutes(_options.ExpirationMinutes));

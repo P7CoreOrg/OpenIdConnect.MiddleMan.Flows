@@ -109,7 +109,7 @@ namespace OIDC.ReferenceWebClient.Areas.Identity.Pages.Account
                 token_type = oidc["token_type"],
                 LoginProvider = info.LoginProvider
             };
-            await _oidcPipelineStore.StoreDownstreamIdTokenResponse(idTokenResponse);
+            await _oidcPipelineStore.StoreDownstreamIdTokenResponseAsync(idTokenResponse);
           
 
             var queryNameId = from claim in info.Principal.Claims

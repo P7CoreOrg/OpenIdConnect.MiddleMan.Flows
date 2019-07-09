@@ -39,7 +39,7 @@ namespace OIDC.ReferenceWebClient.Pages
         {
             if (User.Identity.IsAuthenticated)
             {
-                IdTokenResponse = await _oidcPipelineStore.GetDownstreamIdTokenResponse();
+                IdTokenResponse = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync();
       
                 Claims = Request.HttpContext.User.Claims.ToList();
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -121,7 +122,15 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             context.ProtocolMessage.Prompt = "login";
                         }
                         var allowedParams = await clientSecretStore.FetchAllowedProtocolParamatersAsync(scheme);
-                        context.ProtocolMessage.SetParameter("idp_code", "DT");
+
+                        foreach(var allowedParam in allowedParams)
+                        {
+                            var item = stored.ExtraValues[allowedParam];
+                            if(item != null)
+                            {
+                                context.ProtocolMessage.SetParameter(allowedParam, item);
+                            }
+                        }
                         /*
                         if (context.ProtocolMessage.RequestType == OpenIdConnectRequestType.Authentication)
                         {
