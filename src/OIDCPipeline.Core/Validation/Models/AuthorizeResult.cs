@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OIDCPipeline.Core.Extensions;
@@ -14,12 +15,9 @@ namespace OIDCPipeline.Core.Validation.Models
     {
         public AuthorizeResponse Response { get; }
 
-        private NameValueCollection _extras;
-
-        public AuthorizeResult(AuthorizeResponse response,NameValueCollection extras = null)
+        public AuthorizeResult(AuthorizeResponse response)
         {
             Response = response ?? throw new ArgumentNullException(nameof(response));
-            _extras = extras;
         }
 
         private void Init(HttpContext context)
@@ -109,8 +107,13 @@ namespace OIDCPipeline.Core.Validation.Models
         {
             var uri = Response.RedirectUri;
             var finalResponse = Response.ToNameValueCollection();
-            finalResponse.Merge(_extras);
-
+            if (Response.Request.GrantType != GrantType.AuthorizationCode)
+            {
+                // we want to give out our extra custom stuff here as its the final redirect back
+                finalResponse.Merge(Response.Downstream.Custom);
+                // if is the AuthorizationCode its picked up in a subsequent call to the token endpoint
+            }
+            
             var query = finalResponse.ToQueryString();
 
             if (Response.Request.ResponseMode == OidcConstants.ResponseModes.Query)
@@ -141,13 +144,17 @@ namespace OIDCPipeline.Core.Validation.Models
             url = HtmlEncoder.Default.Encode(url);
             html = html.Replace("{uri}", url);
             var finalResponse = Response.ToNameValueCollection();
-            finalResponse.Merge(_extras);
+            if (Response.Request.GrantType != GrantType.AuthorizationCode)
+            {
+                // we want to give out our extra custom stuff here as its the final redirect back
+                finalResponse.Merge(Response.Downstream.Custom);
+                // if is the AuthorizationCode its picked up in a subsequent call to the token endpoint
+            }
+         
             html = html.Replace("{body}", finalResponse.ToFormPost());
 
             return html;
         }
-
-
 
         public async Task ExecuteResultAsync(ActionContext context)
         {

@@ -129,9 +129,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             IdToken = oidcMessage.IdToken,
                             RefreshToken = oidcMessage.RefreshToken,
                             TokenType = oidcMessage.TokenType,
-                            LoginProvider = scheme,
-                            CodeChallenge = stored.CodeChallenge,
-                            CodeChallengeMethod = stored.CodeChallengeMethod
+                            LoginProvider = scheme
                         };
                         await pipeLineStore.StoreDownstreamIdTokenResponseAsync(nonce.Value,idTokenResponse);
 

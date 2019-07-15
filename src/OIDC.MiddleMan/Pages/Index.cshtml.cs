@@ -47,12 +47,13 @@ namespace OIDC.ReferenceWebClient.Pages
         }
         public async Task<IActionResult> OnPostWay2(string data)
         {
-            var extras = new NameValueCollection
-            {
-                ["prodInstance"] = Guid.NewGuid().ToString()
-            };
             string nonce = HttpContext.GetOIDCPipeLineKey();
-            var result = await _oidcResponseGenerator.CreateIdTokenActionResultResponseAsync(nonce,extras, true);
+            
+            await _oidcPipelineStore.StoreDownstreamCustomDataAsync(nonce, new Dictionary<string, object> {
+                { "prodInstance",Guid.NewGuid()}
+            });
+          
+            var result = await _oidcResponseGenerator.CreateIdTokenActionResultResponseAsync(nonce, true);
             await _signInManager.SignOutAsync();// we don't want our loggin hanging around
             return result;
 

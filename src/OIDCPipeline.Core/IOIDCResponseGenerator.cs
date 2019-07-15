@@ -6,6 +6,6 @@ namespace OIDCPipeline.Core
 {
     public interface IOIDCResponseGenerator
     {
-        Task<IActionResult> CreateIdTokenActionResultResponseAsync(string key,NameValueCollection extras = null, bool delete = true);
+        Task<IActionResult> CreateIdTokenActionResultResponseAsync(string key, bool delete = true);
     }
 }

@@ -3,6 +3,7 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Mvc;
 using OIDCPipeline.Core.Extensions;
 using OIDCPipeline.Core.Validation.Models;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -24,17 +25,16 @@ namespace OIDCPipeline.Core
         }
         public async Task<IActionResult> CreateIdTokenActionResultResponseAsync(
             string key,
-            NameValueCollection extras = null, 
             bool delete = true)
         {
-            if (extras == null) extras = new NameValueCollection();
+            
        
             var original = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync(key);
             var downstream = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync(key);
-
+                    
             if (!string.IsNullOrWhiteSpace(original.Nonce))
             {
-                extras["nonce"] = original.Nonce;
+                downstream.Custom["nonce"] = original.Nonce;
             }
 
             var header = new JwtHeader();
@@ -48,8 +48,6 @@ namespace OIDCPipeline.Core
             if ( original.CodeChallenge.IsPresent() &&
                  original.CodeChallengeMethod.IsPresent())
             {
-                downstream.Extras.Merge(extras);
-
                 // slide out the stored stuff , as we will have a incoming token request with a code
                 await _oidcPipelineStore.StoreDownstreamIdTokenResponseAsync(key, downstream);
                 authResponse.Code = key;
@@ -65,7 +63,7 @@ namespace OIDCPipeline.Core
 
              
            
-            var authorizeResult = new AuthorizeResult(authResponse,extras);
+            var authorizeResult = new AuthorizeResult(authResponse);
 
             if (delete && authResponse.Code.IsMissing())
             {

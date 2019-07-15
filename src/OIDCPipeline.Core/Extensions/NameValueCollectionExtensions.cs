@@ -19,6 +19,15 @@ namespace OIDCPipeline.Core.Extensions
                 collection[key] = extras[key];
             }
         }
+        public static void Merge<T>(this NameValueCollection collection, Dictionary<string,T> extras) 
+        {
+            if (extras == null) return;
+            foreach (var item in extras)
+            {
+                // Overwrite any entry already there    
+                collection[item.Key] = item.Value.ToString() ;
+            }
+        }
         public static string ToQueryString(this NameValueCollection collection)
         {
             if (collection.Count == 0)

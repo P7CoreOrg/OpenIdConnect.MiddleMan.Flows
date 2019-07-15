@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using OIDCPipeline.Core.Validation.Models;
 
 namespace OIDCPipeline.Core
@@ -12,9 +13,8 @@ namespace OIDCPipeline.Core
         public string TokenType { get; set; }
         public string ExpiresAt { get; set; }
         public string LoginProvider { get; set; }
-        public string CodeChallenge { get; set; }
-        public string CodeChallengeMethod { get; set; }
-        public NameValueCollection Extras { get; set; } = new NameValueCollection();
+       
         public ValidatedAuthorizeRequest Request { get; set; }
+        public Dictionary<string, object> Custom { get; internal set; } = new Dictionary<string, object>();
     }
 }

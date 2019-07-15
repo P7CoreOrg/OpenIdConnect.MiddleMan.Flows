@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Validation.Models;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OIDCPipeline.Core
@@ -40,6 +41,18 @@ namespace OIDCPipeline.Core
             var result = _memoryCache.Get<ValidatedAuthorizeRequest>(
                 OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id));
             return Task.FromResult(result);
+        }
+
+        public Task StoreDownstreamCustomDataAsync(string id, Dictionary<string, object> custom)
+        {
+            var result = _memoryCache.Get<IdTokenResponse>(
+                   OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
+            if(result == null)
+            {
+                throw new Exception("Does not exist");
+            }
+            result.Custom = custom;
+            return StoreDownstreamIdTokenResponseAsync(id, result);
         }
 
         public Task StoreDownstreamIdTokenResponseAsync(string id, IdTokenResponse response)

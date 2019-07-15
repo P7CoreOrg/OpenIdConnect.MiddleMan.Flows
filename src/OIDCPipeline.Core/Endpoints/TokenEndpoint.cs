@@ -68,7 +68,8 @@ namespace OIDCPipeline.Core.Endpoints
                 {
                     IdentityToken = downstream.IdToken,
                     AccessToken = downstream.AccessToken,
-                    AccessTokenLifetime = Convert.ToInt32(downstream.ExpiresAt)
+                    AccessTokenLifetime = Convert.ToInt32(downstream.ExpiresAt),
+                    Custom = downstream.Custom
                 };
                 var result = new TokenResult(tokenResponse);
                 return result;
