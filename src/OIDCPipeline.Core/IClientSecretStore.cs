@@ -7,6 +7,8 @@ namespace OIDCPipeline.Core
     public interface IClientSecretStore
     {
         Task<string> FetchClientSecretAsync(string scheme, string clientId);
+        Task<List<string>> FetchClientRedirectUrisAsync(string scheme, string clientId);
         Task<List<string>> FetchAllowedProtocolParamatersAsync(string scheme);
+        Task<ClientRecord> FetchClientRecordAsync(string clientId);
     }
 }

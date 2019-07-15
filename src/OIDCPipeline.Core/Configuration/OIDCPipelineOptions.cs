@@ -13,6 +13,8 @@
         public string PostAuthorizeHookRedirectUrl { get; set; } = "/";
         public string PostAuthorizeHookErrorRedirectUrl { get; set; } = "/";
         public DiscoveryOptions Discovery { get; set; } = new DiscoveryOptions();
-
+        public InputLengthRestrictions InputLengthRestrictions { get; set; } = new InputLengthRestrictions();
+        public bool AllowPlainTextPkce { get; internal set; } = false;
+        
     }
 }

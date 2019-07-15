@@ -102,11 +102,11 @@ namespace OIDC.ReferenceWebClient.Areas.Identity.Pages.Account
             var oidc = await HarvestOidcDataAsync();
             IdTokenResponse idTokenResponse = new IdTokenResponse
             {
-                access_token = oidc["access_token"],
-                expires_at = oidc["expires_at"],
-                id_token = oidc["id_token"],
-                refresh_token = oidc["refresh_token"],
-                token_type = oidc["token_type"],
+                AccessToken = oidc["access_token"],
+                ExpiresAt = oidc["expires_at"],
+                IdToken = oidc["id_token"],
+                RefreshToken = oidc["refresh_token"],
+                TokenType = oidc["token_type"],
                 LoginProvider = info.LoginProvider
             };
      //       await _oidcPipelineStore.StoreDownstreamIdTokenResponseAsync(idTokenResponse);

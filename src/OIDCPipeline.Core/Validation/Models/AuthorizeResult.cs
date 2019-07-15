@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace OIDCPipeline.Core.AuthorizationEndpoint
+namespace OIDCPipeline.Core.Validation.Models
 {
     internal class AuthorizeResult : IActionResult
     {

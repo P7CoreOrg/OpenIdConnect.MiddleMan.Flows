@@ -39,7 +39,7 @@ namespace OIDC.ReferenceWebClient.Pages
         {
             if (User.Identity.IsAuthenticated)
             {
-                string nonce = HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
+                string nonce = HttpContext.GetOIDCPipeLineKey();
                 IdTokenResponse = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync(nonce);
 
                 Claims = Request.HttpContext.User.Claims.ToList();
@@ -51,7 +51,7 @@ namespace OIDC.ReferenceWebClient.Pages
             {
                 ["prodInstance"] = Guid.NewGuid().ToString()
             };
-            string nonce = HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
+            string nonce = HttpContext.GetOIDCPipeLineKey();
             var result = await _oidcResponseGenerator.CreateIdTokenActionResultResponseAsync(nonce,extras, true);
             await _signInManager.SignOutAsync();// we don't want our loggin hanging around
             return result;

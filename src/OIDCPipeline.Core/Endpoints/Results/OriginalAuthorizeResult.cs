@@ -9,11 +9,11 @@ using OIDCPipeline.Core.Hosting;
 namespace OIDCPipeline.Core.Endpoints.Results
 {
      
-    internal class AuthorizeResult : IEndpointResult
+    internal class OriginalAuthorizeResult : IEndpointResult
     {
         private string _redirectUri;
 
-        public AuthorizeResult(string redirectUri)
+        public OriginalAuthorizeResult(string redirectUri)
         {
             _redirectUri = redirectUri;
         }

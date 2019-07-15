@@ -43,7 +43,8 @@ namespace OIDCPipeline.Core.Endpoints
             var downstreamStuff = JsonConvert.DeserializeObject<Dictionary<string, object>>(response.Raw);
             downstreamStuff["authorization_endpoint"]
                = $"{context.Request.Scheme}://{context.Request.Host}/connect/authorize";
-
+            downstreamStuff["token_endpoint"]
+              = $"{context.Request.Scheme}://{context.Request.Host}/connect/token";
             return new DiscoveryDocumentResult(downstreamStuff, _options.Discovery.ResponseCacheInterval);
 
         }

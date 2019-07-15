@@ -1,4 +1,6 @@
-﻿namespace OIDCPipeline.Core.AuthorizationEndpoint
+﻿using OIDCPipeline.Core.Extensions;
+
+namespace OIDCPipeline.Core.Validation.Models
 {
     internal class AuthorizeResponse
     {
@@ -15,5 +17,7 @@
         public string Error { get; set; }
         public string ErrorDescription { get; set; }
         public bool IsError => Error.IsPresent();
+
+        public IdTokenResponse Downstream { get; internal set; }
     }
 }

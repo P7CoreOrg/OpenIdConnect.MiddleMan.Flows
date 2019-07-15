@@ -41,10 +41,7 @@ namespace OIDC.ReferenceWebClient
             var section = Configuration.GetSection("oauth2");
             section.Bind(oAuth2SchemeRecords);
 
-            section = Configuration.GetSection("clientSecrets");
-            var clientSecrets = new Dictionary<string, string>();
-            section.Bind(clientSecrets);
-
+ 
             section = Configuration.GetSection("oidcOptionStore");
             var oidcSchemeRecords = new Dictionary<string, OIDCSchemeRecord>();
             section.Bind(oidcSchemeRecords);

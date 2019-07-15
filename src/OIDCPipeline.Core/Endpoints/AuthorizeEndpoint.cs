@@ -5,14 +5,17 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityModel;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using OIDCPipeline.Core.AuthorizationEndpoint;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Endpoints.Results;
 using OIDCPipeline.Core.Extensions;
 using OIDCPipeline.Core.Hosting;
+using OIDCPipeline.Core.Logging;
+using OIDCPipeline.Core.Validation;
+using OIDCPipeline.Core.Validation.Models;
 
 namespace OIDCPipeline.Core.Endpoints
 {
@@ -36,8 +39,6 @@ namespace OIDCPipeline.Core.Endpoints
             _oidcPipelineStore = oidcPipelineStore;
             _authorizeRequestValidator = authorizeRequestValidator;
             _logger = logger;
-
-
         }
         internal string GenerateNonce()
         {
@@ -48,6 +49,7 @@ namespace OIDCPipeline.Core.Endpoints
         {
             try
             {
+                var request = new ValidatedAuthorizeRequest();
 
                 _logger.LogInformation("Process AuthorizeEndpoint Start.._signinManager.SignOutAsync() ");
                 await _signinManager.SignOutAsync();
@@ -84,25 +86,28 @@ namespace OIDCPipeline.Core.Endpoints
                 {
                     return new StatusCodeResult((int)HttpStatusCode.MethodNotAllowed);
                 }
+                request.Raw = values;
 
-                var result = await _authorizeRequestValidator.ValidateAsync(values);
+
+                var result = await _authorizeRequestValidator.ValidateAsync(request);
+                 
                 _logger.LogInformation($"Method:{context.Request.Method} ValidateAsync Error:{result.IsError}");
                 string redirectUrl = null;
                 if (!result.IsError)
                 {
-                    var nonce = values.Get(OidcConstants.AuthorizeRequest.Nonce);
-                    if (string.IsNullOrWhiteSpace(nonce))
+                 
+                    if (string.IsNullOrWhiteSpace(request.Nonce))
                     {
-                        nonce = GenerateNonce();
-                        values["OidcConstants.AuthorizeRequest.Nonce"] = nonce;
+                        request.Nonce = GenerateNonce();
+                        values["OidcConstants.AuthorizeRequest.Nonce"] = request.Nonce;
                     }
                     var idTokenAuthorizationRequest = values.ToIdTokenAuthorizationRequest();
 
                     _logger.LogInformation($"DeleteStoredCacheAsync previouse if it exists");
-                    await _oidcPipelineStore.DeleteStoredCacheAsync(nonce);
+                    await _oidcPipelineStore.DeleteStoredCacheAsync(result.ValidatedAuthorizeRequest.Nonce);
                     _logger.LogInformation($"StoreOriginalIdTokenRequestAsync clientid:{idTokenAuthorizationRequest.client_id}");
-                    await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(nonce,idTokenAuthorizationRequest);
-                    context.SetStringCookie(".oidc.Nonce.Tracker", nonce, 60);
+                    await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(result.ValidatedAuthorizeRequest.Nonce, result.ValidatedAuthorizeRequest);
+                    context.SetOIDCPipeLineKey(request.Nonce);
                     redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookRedirectUrl}";
 
                 }
@@ -113,14 +118,14 @@ namespace OIDCPipeline.Core.Endpoints
                 _logger.LogInformation($"redirecting to:{redirectUrl}");
              
 
-                return new Results.AuthorizeResult(redirectUrl);
+                return new Results.OriginalAuthorizeResult(redirectUrl);
             }
             catch (Exception ex)
             {
                 string redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookErrorRedirectUrl}";
-                return new Results.AuthorizeResult(redirectUrl);
+                return new Results.OriginalAuthorizeResult(redirectUrl);
             }
         }
-
+         
     }
 }

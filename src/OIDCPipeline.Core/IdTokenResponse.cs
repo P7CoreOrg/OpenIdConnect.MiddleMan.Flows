@@ -1,12 +1,20 @@
-﻿namespace OIDCPipeline.Core
+﻿using System.Collections.Specialized;
+using OIDCPipeline.Core.Validation.Models;
+
+namespace OIDCPipeline.Core
 {
     public class IdTokenResponse
     {
-        public string access_token { get; set; }
-        public string id_token { get; set; }
-        public string refresh_token { get; set; }
-        public string token_type { get; set; }
-        public string expires_at { get; set; }
+       
+        public string AccessToken { get; set; }
+        public string IdToken { get; set; }
+        public string RefreshToken { get; set; }
+        public string TokenType { get; set; }
+        public string ExpiresAt { get; set; }
         public string LoginProvider { get; set; }
+        public string CodeChallenge { get; set; }
+        public string CodeChallengeMethod { get; set; }
+        public NameValueCollection Extras { get; set; } = new NameValueCollection();
+        public ValidatedAuthorizeRequest Request { get; set; }
     }
 }

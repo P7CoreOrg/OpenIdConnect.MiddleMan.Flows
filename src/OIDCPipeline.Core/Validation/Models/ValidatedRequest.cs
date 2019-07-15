@@ -1,11 +1,11 @@
 ﻿using System.Collections.Specialized;
 
-namespace OIDCPipeline.Core.AuthorizationEndpoint
+namespace OIDCPipeline.Core.Validation.Models
 {
     /// <summary>
     /// Base class for a validate authorize or token request
     /// </summary>
-    internal class ValidatedRequest
+    public class ValidatedRequest
     {
         /// <summary>
         /// Gets or sets the raw request data
@@ -14,6 +14,12 @@ namespace OIDCPipeline.Core.AuthorizationEndpoint
         /// The raw.
         /// </value>
         public NameValueCollection Raw { get; set; }
-
+        /// <summary>
+        /// Gets or sets the session identifier.
+        /// </summary>
+        /// <value>
+        /// The session identifier.
+        /// </value>
+        public string SessionId { get; set; }
     }
 }

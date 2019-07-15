@@ -1,4 +1,4 @@
-﻿namespace OIDCPipeline.Core.AuthorizationEndpoint
+﻿namespace OIDCPipeline.Core.Validation.Models
 {
     /// <summary>
     /// Minimal validation result class (base-class for more complext validation results)

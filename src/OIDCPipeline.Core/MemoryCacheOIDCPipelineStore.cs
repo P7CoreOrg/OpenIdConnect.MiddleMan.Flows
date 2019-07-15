@@ -2,23 +2,21 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using OIDCPipeline.Core.Configuration;
+using OIDCPipeline.Core.Validation.Models;
 using System;
 using System.Threading.Tasks;
 
 namespace OIDCPipeline.Core
 {
-    public class MemoryCacheOIDCPipelineStore : IOIDCPipelineStore
+    internal class MemoryCacheOIDCPipelineStore : IOIDCPipelineStore
     {
-        private IHttpContextAccessor _httpContextAccessor;
         private IMemoryCache _memoryCache;
         private MemoryCacheOIDCPipelineStoreOptions _options;
 
         public MemoryCacheOIDCPipelineStore(
-            IHttpContextAccessor httpContextAccessor,
             IOptions<MemoryCacheOIDCPipelineStoreOptions> options,
             IMemoryCache memoryCache)
         {
-            _httpContextAccessor = httpContextAccessor;
             _memoryCache = memoryCache;
             _options = options.Value;
         }
@@ -32,25 +30,33 @@ namespace OIDCPipeline.Core
 
         public Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync(string id)
         {
-            var result = _memoryCache.Get<IdTokenResponse>(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
+            var result = _memoryCache.Get<IdTokenResponse>(
+                OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
             return Task.FromResult(result);
         }
 
-        public Task<IdTokenAuthorizationRequest> GetOriginalIdTokenRequestAsync(string id)
+        public Task<ValidatedAuthorizeRequest> GetOriginalIdTokenRequestAsync(string id)
         {
-            var result = _memoryCache.Get<IdTokenAuthorizationRequest>(OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id));
+            var result = _memoryCache.Get<ValidatedAuthorizeRequest>(
+                OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id));
             return Task.FromResult(result);
         }
 
         public Task StoreDownstreamIdTokenResponseAsync(string id, IdTokenResponse response)
         {
-            _memoryCache.Set(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id), response, TimeSpan.FromMinutes(_options.ExpirationMinutes));
+            _memoryCache.Set(
+                OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id), 
+                response, 
+                TimeSpan.FromMinutes(_options.ExpirationMinutes));
             return Task.CompletedTask;
         }
 
-        public Task StoreOriginalIdTokenRequestAsync(string id, IdTokenAuthorizationRequest request)
+        public Task StoreOriginalIdTokenRequestAsync(string id, ValidatedAuthorizeRequest request)
         {
-            _memoryCache.Set(OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id), request, TimeSpan.FromMinutes(_options.ExpirationMinutes));
+            _memoryCache.Set(
+                OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id), 
+                request, 
+                TimeSpan.FromMinutes(_options.ExpirationMinutes));
             return Task.CompletedTask;
         }
     }

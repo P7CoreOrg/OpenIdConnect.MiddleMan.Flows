@@ -4,12 +4,14 @@ using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using OIDC.ReferenceWebClient.Discovery;
-using OIDCPipeline.Core.AuthorizationEndpoint;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Endpoints;
 using OIDCPipeline.Core.Hosting;
+using OIDCPipeline.Core.Validation;
+using OIDCPipeline.Core.Validation.Default;
 using static OIDCPipeline.Core.Constants;
 
 namespace OIDCPipeline.Core.Extensions
@@ -46,13 +48,19 @@ namespace OIDCPipeline.Core.Extensions
 
             return services;
         }
-        public static void AddOIDCPipeline(this IServiceCollection services, Action<OIDCPipelineOptions> setupAction)
+        public static void AddOIDCPipeline(
+            this IServiceCollection services, 
+            Action<OIDCPipelineOptions> setupAction)
         {
             services.AddRequiredPlatformServices();
             services.Configure(setupAction);
             services.AddTransient<IOIDCResponseGenerator, OIDCResponseGenerator>();
-            services.AddTransient<IAuthorizeRequestValidator, AuthorizeRequestValidator>();
+            services.TryAddTransient<IAuthorizeRequestValidator, DefaultAuthorizeRequestValidator>();
+            services.TryAddTransient<ITokenRequestValidator, DefaultTokenRequestValidator>();
             services.AddDownstreamDiscoveryCache();
+
+
+            services.AddEndpoint<TokenEndpoint>(EndpointNames.Token, ProtocolRoutePaths.Token.EnsureLeadingSlash());
             services.AddEndpoint<DiscoveryEndpoint>(EndpointNames.Discovery, ProtocolRoutePaths.DiscoveryConfiguration.EnsureLeadingSlash());
             services.AddEndpoint<AuthorizeEndpoint>(EndpointNames.Authorize, ProtocolRoutePaths.Authorize.EnsureLeadingSlash());
             services.AddTransient<IEndpointRouter, EndpointRouter>();
@@ -62,6 +70,7 @@ namespace OIDCPipeline.Core.Extensions
         {
             services.Configure(setupAction);
             services.AddTransient<IOIDCPipelineStore, MemoryCacheOIDCPipelineStore>();
+            services.AddTransient<IOIDCPipelineAuthorizationCodeStore, MemoryCacheAuthorizationCodeStore>();
         }
         public static IApplicationBuilder UseOIDCPipelineStore(this IApplicationBuilder app)
         {

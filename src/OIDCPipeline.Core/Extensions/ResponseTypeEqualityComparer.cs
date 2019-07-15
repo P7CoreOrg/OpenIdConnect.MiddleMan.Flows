@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 
 
-namespace OIDCPipeline.Core.AuthorizationEndpoint
+namespace OIDCPipeline.Core.Extensions
 {
     /// <summary>
     /// Compares resource_type strings, where the order of space-delimited values is insignificant.

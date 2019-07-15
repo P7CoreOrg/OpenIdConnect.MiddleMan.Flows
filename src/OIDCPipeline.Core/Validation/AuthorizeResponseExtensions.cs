@@ -1,6 +1,8 @@
-﻿using System.Collections.Specialized;
+﻿using OIDCPipeline.Core.Extensions;
+using OIDCPipeline.Core.Validation.Models;
+using System.Collections.Specialized;
 
-namespace OIDCPipeline.Core.AuthorizationEndpoint
+namespace OIDCPipeline.Core.Validation
 {
     internal static class AuthorizeResponseExtensions
     {

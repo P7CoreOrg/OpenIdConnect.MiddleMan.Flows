@@ -28,16 +28,16 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
             var sp = Global.ServiceProvider;
             var oidcPipelineStore = sp.GetRequiredService<IOIDCPipelineStore>();
             var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
+            string nonce = httpContextAccessor.HttpContext.GetOIDCPipeLineKey();
 
-            string nonce = httpContextAccessor.HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
             var original = oidcPipelineStore.GetOriginalIdTokenRequestAsync(nonce).GetAwaiter().GetResult();
 
             if (original != null)
             {
               
-                if (!string.IsNullOrWhiteSpace(original.nonce))
+                if (!string.IsNullOrWhiteSpace(original.Nonce))
                 {
-                    return original.nonce;
+                    return original.Nonce;
                 }
             }
 
@@ -96,10 +96,14 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                     options.ClientSecret = record.ClientSecret;
                     options.SaveTokens = true;
                     options.TokenValidationParameters.ValidateAudience = false;
+                    options.Events.OnMessageReceived = async context =>
+                    {
+
+                    };
                     options.Events.OnTokenValidated = async context =>
                     {
                         var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
-                       
+                   
                         OpenIdConnectMessage oidcMessage = null;
                         if(context.Options.ResponseType == "id_token")
                         {
@@ -115,30 +119,36 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                         var claims = idToken.Claims.ToList();
                         var nonce = (from item in claims where item.Type == OidcConstants.AuthorizeRequest.Nonce select item).FirstOrDefault();
 
+                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(nonce.Value);
+
                         IdTokenResponse idTokenResponse = new IdTokenResponse
                         {
-                            access_token = oidcMessage.AccessToken,
-                            expires_at = oidcMessage.ExpiresIn,
-                            id_token = oidcMessage.IdToken,
-                            refresh_token = oidcMessage.RefreshToken,
-                            token_type = oidcMessage.TokenType,
-                            LoginProvider = scheme
+                            Request = stored,
+                            AccessToken = oidcMessage.AccessToken,
+                            ExpiresAt = oidcMessage.ExpiresIn,
+                            IdToken = oidcMessage.IdToken,
+                            RefreshToken = oidcMessage.RefreshToken,
+                            TokenType = oidcMessage.TokenType,
+                            LoginProvider = scheme,
+                            CodeChallenge = stored.CodeChallenge,
+                            CodeChallengeMethod = stored.CodeChallengeMethod
                         };
                         await pipeLineStore.StoreDownstreamIdTokenResponseAsync(nonce.Value,idTokenResponse);
 
                     };
                     options.Events.OnRedirectToIdentityProvider = async context =>
                     {
-                        string nonce = context.HttpContext.GetStringCookie(".oidc.Nonce.Tracker");
+                        string nonce = context.HttpContext.GetOIDCPipeLineKey();
                         var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
                         var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(nonce);
                         var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IClientSecretStore>();
 
                         if (stored != null)
                         {
-                            context.ProtocolMessage.ClientId = stored.client_id;
-                            context.Options.ClientId = stored.client_id;
-                            context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme, stored.client_id);
+                            context.ProtocolMessage.ClientId = stored.ClientId;
+                            context.Options.ClientId = stored.ClientId;
+                            context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme, 
+                                stored.ClientId);
 
                         }
                      
@@ -161,7 +171,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
 
                         foreach(var allowedParam in allowedParams)
                         {
-                            var item = stored.ExtraValues[allowedParam];
+                            var item = stored.Raw[allowedParam];
                             if(item != null)
                             {
                                 context.ProtocolMessage.SetParameter(allowedParam, item);

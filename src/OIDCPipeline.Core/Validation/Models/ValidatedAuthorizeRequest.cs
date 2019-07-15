@@ -1,9 +1,9 @@
 ﻿using IdentityModel;
 using System.Collections.Generic;
 
-namespace OIDCPipeline.Core.AuthorizationEndpoint
+namespace OIDCPipeline.Core.Validation.Models
 {
-    internal class ValidatedAuthorizeRequest : ValidatedRequest
+    public class ValidatedAuthorizeRequest : ValidatedRequest
     {
         /// <summary>
         /// Gets or sets the type of the response.

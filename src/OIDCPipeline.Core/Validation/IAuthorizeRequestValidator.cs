@@ -1,13 +1,14 @@
-﻿using System.Collections.Specialized;
+﻿using OIDCPipeline.Core.Validation.Models;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OIDCPipeline.Core.AuthorizationEndpoint
+namespace OIDCPipeline.Core.Validation
 {
     /// <summary>
     ///  Authorize endpoint request validator.
     /// </summary>
-    public interface IAuthorizeRequestValidator
+    internal interface IAuthorizeRequestValidator
     {
         /// <summary>
         ///  Validates authorize request parameters.
@@ -15,6 +16,7 @@ namespace OIDCPipeline.Core.AuthorizationEndpoint
         /// <param name="parameters"></param>
         /// <param name="subject"></param>
         /// <returns></returns>
-        Task<AuthorizeRequestValidationResult> ValidateAsync(NameValueCollection parameters);
+        Task<AuthorizeRequestValidationResult> ValidateAsync(ValidatedAuthorizeRequest request);
+      
     }
 }

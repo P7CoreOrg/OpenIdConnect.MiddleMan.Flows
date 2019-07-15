@@ -8,7 +8,7 @@ using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace OIDCPipeline.Core.AuthorizationEndpoint
+namespace OIDCPipeline.Core.Extensions
 {
     internal static class StringExtensions
     {
