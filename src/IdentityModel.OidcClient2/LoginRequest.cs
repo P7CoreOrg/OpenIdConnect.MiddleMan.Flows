@@ -2,6 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using System;
+using System.Threading.Tasks;
 using IdentityModel.OidcClient.Browser;
 
 namespace IdentityModel.OidcClient
@@ -42,5 +44,7 @@ namespace IdentityModel.OidcClient
         /// The back channel extra parameters.
         /// </value>
         public object BackChannelExtraParameters { get; set; }
+
+        public Func<ResponseValidationResult, Task> OnProcessResponse { get; set; }
     }
 }

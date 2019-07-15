@@ -1,8 +1,10 @@
 ﻿using IdentityModel.OidcClient;
 using Serilog;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace NativeConsolePKCEClient
 {
@@ -50,8 +52,21 @@ namespace NativeConsolePKCEClient
             options.LoggerFactory.AddSerilog(serilog);
 
             _oidcClient = new OidcClient(options);
-            var result = await _oidcClient.LoginAsync(new LoginRequest());
 
+            var extra = new
+            {
+                mine_data = Guid.NewGuid().ToString()
+            };
+            ResponseValidationResult rvr = null;
+            var result = await _oidcClient.LoginAsync(new LoginRequest()
+            {
+                FrontChannelExtraParameters = extra,
+                OnProcessResponse = context => {
+                    rvr = context;
+                    return Task.CompletedTask;
+                }
+            });
+            var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(rvr.TokenResponse.Raw);
             ShowResult(result);
             
         }

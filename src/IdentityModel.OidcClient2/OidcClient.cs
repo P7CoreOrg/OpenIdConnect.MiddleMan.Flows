@@ -26,6 +26,7 @@ namespace IdentityModel.OidcClient
 
         private readonly bool useDiscovery;
         private readonly ResponseProcessor _processor;
+        private LoginRequest _loginRequest;
 
         /// <summary>
         /// Gets the options.
@@ -84,6 +85,7 @@ namespace IdentityModel.OidcClient
         /// <returns></returns>
         public virtual async Task<LoginResult> LoginAsync(LoginRequest request)
         {
+            _loginRequest = request;
             _logger.LogTrace("LoginAsync");
             _logger.LogInformation("Starting authentication request.");
 
@@ -179,6 +181,10 @@ namespace IdentityModel.OidcClient
             }
 
             var result = await _processor.ProcessResponseAsync(authorizeResponse, state, extraParameters);
+            if (_loginRequest.OnProcessResponse != null)
+            {
+                await _loginRequest.OnProcessResponse(result);
+            }
             if (result.IsError)
             {
                 _logger.LogError(result.Error);
@@ -240,6 +246,8 @@ namespace IdentityModel.OidcClient
 
             return loginResult;
         }
+
+      
 
         /// <summary>
         /// Gets the user claims from the userinfo endpoint.
