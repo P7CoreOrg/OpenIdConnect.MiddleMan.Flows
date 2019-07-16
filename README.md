@@ -12,8 +12,26 @@ The OIDCPipeline.Core DiscoveryEndpoint calls googles [Discovery Document](https
 
 We are repacing the following;  
 **authorization_endpoint** and **token_endpoint**  
+```
+{
+	"issuer": "https://accounts.google.com",
+	"authorization_endpoint": "https://localhost:5001/connect/authorize",
+	"token_endpoint": "https://localhost:5001/connect/token",
+	"userinfo_endpoint": "https://openidconnect.googleapis.com/v1/userinfo",
+	"revocation_endpoint": "https://oauth2.googleapis.com/revoke",
+	"jwks_uri": "https://www.googleapis.com/oauth2/v3/certs",
+	"response_types_supported": ["code", "token", "id_token", "code token", "code id_token", "token id_token", "code token id_token", "none"],
+	"subject_types_supported": ["public"],
+	"id_token_signing_alg_values_supported": ["RS256"],
+	"scopes_supported": ["openid", "email", "profile"],
+	"token_endpoint_auth_methods_supported": ["client_secret_post", "client_secret_basic"],
+	"claims_supported": ["aud", "email", "email_verified", "exp", "family_name", "given_name", "iat", "iss", "locale", "name", "picture", "sub"],
+	"code_challenge_methods_supported": ["plain", "S256"]
+}
+```
 
 The authorization_endpoint captures the original request, and the token_endpoint only supports the authorization_code flow.  
+**NOTE**: we are **NOT** a replacement for the IDP. So even though we changed the *token_endpoint*, we are **NOT** going to proxy calls to the downstream OIDC server.  This is a **authorization_code** only login flow service for clients.  
 
 
 ```
