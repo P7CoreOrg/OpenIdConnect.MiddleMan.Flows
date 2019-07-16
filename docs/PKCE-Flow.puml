@@ -5,6 +5,6 @@ title Native PKCE Flow
 Native -> Orchestrator: authorize_code flow
 Native <- Orchestrator: code
 Native -> Orchestrator: /token?code=blah
-Native <- Orchestrator: id_token
+Native <- Orchestrator: dog
 
 @enduml
