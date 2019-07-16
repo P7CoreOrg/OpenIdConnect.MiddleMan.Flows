@@ -2,9 +2,67 @@
 
 title Native PKCE Flow
 
-Native -> Orchestrator: authorize_code flow
-Native <- Orchestrator: code
-Native -> Orchestrator: /token?code=blah
-Native <- Orchestrator: dog
+Native -> Orchestrator: /Authorization
+note right of Native
+?response_type=code
+&nonce={nonce}
+&state={State}
+&code_challenge={code_challenge}
+&code_challenge_method=S256
+&client_id={client_id}
+&scope=openid profile
+&redirect_uri={app url}
+&custom_data=7abf6793-930a-4fa2-a5ed-6a7f5473c6e7
+
+
+end note
+Orchestrator->OIDCPipelineStore: Store original request (session_key)
+
+== Time ==
+Orchestrator->OIDCPipelineStore: Fetch original request (session_key)
+Orchestrator->OIDCPipelineClientStore: Fetch ClientSecret(client_id)
+Orchestrator->Orchestrator: Build downstream aurhorize_code flow
+Orchestrator->DownstreamIDP: /Authorization
+note right of Orchestrator
+?response_type=code
+&nonce={original nonce}
+&code_challenge={code_challenge}
+&code_challenge_method=S256
+&client_id={original client_id}
+&client_secret={original client_secret}
+&scope=openid profile
+&redirect_uri={orchestrator redirectUrl}
+
+end note
+== Time ==
+
+DownstreamIDP->Orchestrator: {id_token/access_token payload}
+Orchestrator->OIDCPipelineStore: Store Downstream Response (session_key)
+
+== Time ==
+Orchestrator->Orchestrator: shows a few pages
+== Time ==
+
+
+Native <- Orchestrator: Authorize response
+note right of Native
+?code={session_key}
+&state={original state}
+end note
+
+Native -> Orchestrator: token_endpoint
+note right of Native
+?client_id={client_id}
+&grant_type=authorization_code
+&code={session_key}
+&redirect_uri={app redirect_uri}
+&code_verifier={code_verifier}
+end note
+Orchestrator->OIDCPipelineStore: Fetch Downstream Response (code)
+Orchestrator->Orchestrator: validate request against downstream lookup
+
+Native <- Orchestrator: id_token/access_token/custom_data payload
+Native -> DownstreamIDP: /user_info?access_token={access_token}
+Native <- DownstreamIDP: more user info
 
 @enduml
