@@ -1,6 +1,11 @@
 # OpenIdConnect.MiddleMan.Flows
 Sometimes just doing a login isn't enough
 
+There is login and then there are followup pages that have nothing to do with the IDP.  Just because someone has a valid account on some IDP (i.e. you are using google as your main idp), doesn't mean that the user has an account on your platform.  Those follow up "sign up" are not googles, they are yours.  This is where you vet the user and perhaps ask for money before you burn resources on your end to make a real account.  
+
+This project demos that process and advertises itself as a compliant OIDC provider.  You are not and IDP, but an orchestrator whose interfrace to a mobile app is a standard that they can code against.
+
+
 The OIDCPipeline.Core DiscoveryEndpoint calls googles [Discovery Document](https://accounts.google.com/.well-known/openid-configuration), replaces the authorization_endpoint with our own.  We are telling clients that we are the authority and thanks to the fact that the response lets us point to other endpoints helps.  
 
 We are repacing the following;  
