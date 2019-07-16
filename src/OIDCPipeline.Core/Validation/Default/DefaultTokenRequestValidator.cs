@@ -174,7 +174,7 @@ namespace OIDCPipeline.Core.Validation
 
             return Valid();
         }
-        private TokenRequestValidationResult ValidateAuthorizationCodeWithProofKeyParameters(string codeVerifier, IdTokenResponse idTokenResopnse)
+        private TokenRequestValidationResult ValidateAuthorizationCodeWithProofKeyParameters(string codeVerifier, FinalDownstreamAuthorizeResponse idTokenResopnse)
         {
             if (idTokenResopnse.Request.CodeChallenge.IsMissing() || idTokenResopnse.Request.CodeChallengeMethod.IsMissing())
             {

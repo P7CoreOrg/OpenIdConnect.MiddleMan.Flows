@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace OIDCPipeline.Core.Hosting
 {
-    public class Endpoint
+    internal class Endpoint
     {
         public Endpoint(string name, string path, Type handlerType)
         {

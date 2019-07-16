@@ -7,7 +7,7 @@ namespace OIDCPipeline.Core.Endpoints.ResponseHandling
     /// <summary>
     /// Models a token response
     /// </summary>
-    public class TokenResponse
+    internal class TokenResponse
     {
         /// <summary>
         /// Gets or sets the identity token.

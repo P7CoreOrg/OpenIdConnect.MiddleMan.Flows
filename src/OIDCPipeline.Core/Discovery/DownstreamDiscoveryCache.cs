@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace OIDC.ReferenceWebClient.Discovery
 {
 
-    public class DownstreamDiscoveryCache : DiscoveryCache, IDownstreamDiscoveryCache
+    internal class DownstreamDiscoveryCache : DiscoveryCache, IDownstreamDiscoveryCache
     {
         public DownstreamDiscoveryCache(DiscoveryClient client) : base(client)
         {

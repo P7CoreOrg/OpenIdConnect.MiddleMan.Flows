@@ -121,7 +121,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
 
                         var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(nonce.Value);
 
-                        IdTokenResponse idTokenResponse = new IdTokenResponse
+                        FinalDownstreamAuthorizeResponse idTokenResponse = new FinalDownstreamAuthorizeResponse
                         {
                             Request = stored,
                             AccessToken = oidcMessage.AccessToken,

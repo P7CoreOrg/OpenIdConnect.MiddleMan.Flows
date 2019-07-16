@@ -33,7 +33,7 @@ namespace OIDC.ReferenceWebClient.Pages
             _oidcPipelineStore = oidcPipelineStore;
         }
         public List<Claim> Claims { get; set; }
-        public IdTokenResponse IdTokenResponse { get; private set; }
+        public FinalDownstreamAuthorizeResponse IdTokenResponse { get; private set; }
 
         public async Task OnGet()
         {
@@ -53,7 +53,7 @@ namespace OIDC.ReferenceWebClient.Pages
                 { "prodInstance",Guid.NewGuid()}
             });
           
-            var result = await _oidcResponseGenerator.CreateIdTokenActionResultResponseAsync(nonce, true);
+            var result = await _oidcResponseGenerator.CreateAuthorizeResponseActionResultAsync(nonce, true);
             await _signInManager.SignOutAsync();// we don't want our loggin hanging around
             return result;
 

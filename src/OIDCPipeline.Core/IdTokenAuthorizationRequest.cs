@@ -2,7 +2,7 @@
 
 namespace OIDCPipeline.Core
 {
-    public class IdTokenAuthorizationRequest
+    internal class IdTokenAuthorizationRequest
     {
         public NameValueCollection ExtraValues { get; set; }
 

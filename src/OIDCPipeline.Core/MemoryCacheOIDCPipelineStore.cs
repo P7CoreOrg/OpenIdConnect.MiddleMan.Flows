@@ -29,9 +29,9 @@ namespace OIDCPipeline.Core
             return Task.CompletedTask;
         }
 
-        public Task<IdTokenResponse> GetDownstreamIdTokenResponseAsync(string id)
+        public Task<FinalDownstreamAuthorizeResponse> GetDownstreamIdTokenResponseAsync(string id)
         {
-            var result = _memoryCache.Get<IdTokenResponse>(
+            var result = _memoryCache.Get<FinalDownstreamAuthorizeResponse>(
                 OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
             return Task.FromResult(result);
         }
@@ -45,7 +45,7 @@ namespace OIDCPipeline.Core
 
         public Task StoreDownstreamCustomDataAsync(string id, Dictionary<string, object> custom)
         {
-            var result = _memoryCache.Get<IdTokenResponse>(
+            var result = _memoryCache.Get<FinalDownstreamAuthorizeResponse>(
                    OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
             if(result == null)
             {
@@ -55,7 +55,7 @@ namespace OIDCPipeline.Core
             return StoreDownstreamIdTokenResponseAsync(id, result);
         }
 
-        public Task StoreDownstreamIdTokenResponseAsync(string id, IdTokenResponse response)
+        public Task StoreDownstreamIdTokenResponseAsync(string id, FinalDownstreamAuthorizeResponse response)
         {
             _memoryCache.Set(
                 OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id), 

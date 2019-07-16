@@ -18,6 +18,6 @@ namespace OIDCPipeline.Core.Validation.Models
         public string ErrorDescription { get; set; }
         public bool IsError => Error.IsPresent();
 
-        public IdTokenResponse Downstream { get; internal set; }
+        public FinalDownstreamAuthorizeResponse Downstream { get; internal set; }
     }
 }

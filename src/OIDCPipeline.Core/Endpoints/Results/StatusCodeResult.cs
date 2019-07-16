@@ -14,7 +14,7 @@ namespace OIDCPipeline.Core.Endpoints.Results
     /// Result for a raw HTTP status code
     /// </summary>
     /// <seealso cref="IdentityServer4.Hosting.IEndpointResult" />
-    public class StatusCodeResult : IEndpointResult
+    internal class StatusCodeResult : IEndpointResult
     {
         /// <summary>
         /// Gets the status code.

@@ -17,20 +17,17 @@ namespace OIDCPipeline.Core.Endpoints
     {
         private OIDCPipelineOptions _options;
         private IOIDCPipelineStore _oidcPipelineStore;
-        private IOIDCPipelineAuthorizationCodeStore _authorizationCodeStore;
         private ITokenRequestValidator _tokenRequestValidator;
         private ILogger<AuthorizeEndpoint> _logger;
 
         public TokenEndpoint(
             OIDCPipelineOptions options,
             IOIDCPipelineStore oidcPipelineStore,
-            IOIDCPipelineAuthorizationCodeStore authorizationCodeStore,
             ITokenRequestValidator tokenRequestValidator,
             ILogger<AuthorizeEndpoint> logger)
         {
             _options = options;
             _oidcPipelineStore = oidcPipelineStore;
-            _authorizationCodeStore = authorizationCodeStore;
             _tokenRequestValidator = tokenRequestValidator;
             _logger = logger;
         }

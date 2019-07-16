@@ -100,7 +100,7 @@ namespace OIDC.ReferenceWebClient.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var oidc = await HarvestOidcDataAsync();
-            IdTokenResponse idTokenResponse = new IdTokenResponse
+            FinalDownstreamAuthorizeResponse idTokenResponse = new FinalDownstreamAuthorizeResponse
             {
                 AccessToken = oidc["access_token"],
                 ExpiresAt = oidc["expires_at"],

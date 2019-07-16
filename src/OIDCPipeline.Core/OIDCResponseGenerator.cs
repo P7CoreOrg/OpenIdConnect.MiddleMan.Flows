@@ -14,16 +14,12 @@ namespace OIDCPipeline.Core
     internal class OIDCResponseGenerator : IOIDCResponseGenerator
     {
         private IOIDCPipelineStore _oidcPipelineStore;
-        private IOIDCPipelineAuthorizationCodeStore _authorizationCodeStore;
 
-        public OIDCResponseGenerator(
-            IOIDCPipelineStore oidcPipelineStore,
-            IOIDCPipelineAuthorizationCodeStore authorizationCodeStore)
+        public OIDCResponseGenerator(IOIDCPipelineStore oidcPipelineStore)
         {
             _oidcPipelineStore = oidcPipelineStore;
-            _authorizationCodeStore = authorizationCodeStore;
         }
-        public async Task<IActionResult> CreateIdTokenActionResultResponseAsync(
+        public async Task<IActionResult> CreateAuthorizeResponseActionResultAsync(
             string key,
             bool delete = true)
         {

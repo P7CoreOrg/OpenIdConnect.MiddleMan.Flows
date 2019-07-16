@@ -12,7 +12,7 @@ namespace Microsoft.AspNetCore.Http
     /// <summary>
     /// Options for Content Security Policy
     /// </summary>
-    public class CspOptions
+    internal class CspOptions
     {
         /// <summary>
         /// Gets or sets the minimum CSP level.

@@ -18,7 +18,7 @@ namespace OIDCPipeline.Core.Validation.Models
         /// <value>
         /// The authorization code.
         /// </value>
-        public IdTokenResponse IdTokenResponse { get; set; }
+        public FinalDownstreamAuthorizeResponse IdTokenResponse { get; set; }
 
         /// <summary>
         /// Gets or sets the authorization code handle.

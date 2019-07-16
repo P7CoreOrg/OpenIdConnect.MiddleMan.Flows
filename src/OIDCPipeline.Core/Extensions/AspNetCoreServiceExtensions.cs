@@ -26,7 +26,7 @@ namespace OIDCPipeline.Core.Extensions
         /// <param name="name">The name.</param>
         /// <param name="path">The path.</param>
         /// <returns></returns>
-        public static IServiceCollection AddEndpoint<T>(this IServiceCollection services, string name, PathString path)
+        internal static IServiceCollection AddEndpoint<T>(this IServiceCollection services, string name, PathString path)
             where T : class, IEndpointHandler
         {
             services.AddTransient<T>();
@@ -39,7 +39,7 @@ namespace OIDCPipeline.Core.Extensions
         /// </summary>
         /// <param name="builder">The builder.</param>
         /// <returns></returns>
-        public static IServiceCollection AddRequiredPlatformServices(this IServiceCollection services)
+        internal static IServiceCollection AddRequiredPlatformServices(this IServiceCollection services)
         {
 
             services.AddOptions();
@@ -70,7 +70,6 @@ namespace OIDCPipeline.Core.Extensions
         {
             services.Configure(setupAction);
             services.AddTransient<IOIDCPipelineStore, MemoryCacheOIDCPipelineStore>();
-            services.AddTransient<IOIDCPipelineAuthorizationCodeStore, MemoryCacheAuthorizationCodeStore>();
         }
         public static IApplicationBuilder UseOIDCPipelineStore(this IApplicationBuilder app)
         {
