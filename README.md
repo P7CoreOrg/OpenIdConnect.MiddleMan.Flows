@@ -5,6 +5,8 @@ There is login and then there are followup pages that have nothing to do with th
 
 This project demos that process and advertises itself as a compliant OIDC provider.  You are not and IDP, but an orchestrator whose interfrace to a mobile app is a standard that they can code against.
 
+![PlantUML model](http://www.plantuml.com/plantuml/png/5SqngiCm383X_PtYzG2rnaAdW6cXT72kuCeY3jYIaMHo_JRJ3__oBUPPVVRsTzaPsomqjVrNzs5t0Cr7s7QlypED58MTs0DAX_KMHIdf1caGlqeKPa8FIR6IkMON3SycXq7FvgHG10tMTtnSpnt6QIx4vTSl)
+
 
 The OIDCPipeline.Core DiscoveryEndpoint calls googles [Discovery Document](https://accounts.google.com/.well-known/openid-configuration), replaces the authorization_endpoint with our own.  We are telling clients that we are the authority and thanks to the fact that the response lets us point to other endpoints helps.  
 
