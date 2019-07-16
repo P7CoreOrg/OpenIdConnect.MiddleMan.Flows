@@ -17,7 +17,7 @@ namespace OIDCPipeline.Core
         public List<string> AllowedProtocolParamaters { get; set; }
     }
 
-    public class InMemoryClientSecretStore: IClientSecretStore
+    public class InMemoryClientSecretStore: IOIDCPipelineClientStore
     {
         private Dictionary<string, OIDCSchemeRecord> _records;
 

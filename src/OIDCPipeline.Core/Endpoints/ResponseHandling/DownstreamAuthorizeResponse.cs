@@ -2,9 +2,9 @@
 using System.Collections.Specialized;
 using OIDCPipeline.Core.Validation.Models;
 
-namespace OIDCPipeline.Core
+namespace OIDCPipeline.Core.Endpoints.ResponseHandling
 {
-    public class FinalDownstreamAuthorizeResponse
+    public class DownstreamAuthorizeResponse
     {
         public string AccessToken { get; set; }
         public string IdToken { get; set; }

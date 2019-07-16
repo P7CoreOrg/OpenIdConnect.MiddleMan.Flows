@@ -101,15 +101,24 @@ namespace OIDCPipeline.Core.Endpoints
                         request.Nonce = GenerateNonce();
                         values["OidcConstants.AuthorizeRequest.Nonce"] = request.Nonce;
                     }
-                    var idTokenAuthorizationRequest = values.ToIdTokenAuthorizationRequest();
+                    var downstreamAuthorizationRequest = values.ToDownstreamAuthorizationRequest();
 
-                    _logger.LogInformation($"DeleteStoredCacheAsync previouse if it exists");
-                    await _oidcPipelineStore.DeleteStoredCacheAsync(result.ValidatedAuthorizeRequest.Nonce);
-                    _logger.LogInformation($"StoreOriginalIdTokenRequestAsync clientid:{idTokenAuthorizationRequest.client_id}");
-                    await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(result.ValidatedAuthorizeRequest.Nonce, result.ValidatedAuthorizeRequest);
-                    context.SetOIDCPipeLineKey(request.Nonce);
+                    var key = context.GetOIDCPipeLineKey();
+                    if (!string.IsNullOrWhiteSpace(key))
+                    {
+                        _logger.LogInformation($"DeleteStoredCacheAsync previouse if it exists");
+                        await _oidcPipelineStore.DeleteStoredCacheAsync(key);
+                    }
+
+                    // Initially was using the NONCE as the key, but we can't trust that clients will not hardcode a nonce
+                    // The key has to be generated on our side and subsequently stored as a cookie.
+                    key = Guid.NewGuid().ToString("N");
+                    context.SetOIDCPipeLineKey(key);
+
+                    _logger.LogInformation($"StoreOriginalIdTokenRequestAsync clientid:{downstreamAuthorizationRequest.client_id}");
+                    await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(key, result.ValidatedAuthorizeRequest);
+
                     redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookRedirectUrl}";
-
                 }
                 else
                 {

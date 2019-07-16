@@ -1,4 +1,5 @@
-﻿using OIDCPipeline.Core.Validation.Models;
+﻿using OIDCPipeline.Core.Endpoints.ResponseHandling;
+using OIDCPipeline.Core.Validation.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,9 +9,9 @@ namespace OIDCPipeline.Core
     {
         Task StoreOriginalIdTokenRequestAsync(string key, ValidatedAuthorizeRequest request);
         Task<ValidatedAuthorizeRequest> GetOriginalIdTokenRequestAsync(string key);
-        Task StoreDownstreamIdTokenResponseAsync(string key, FinalDownstreamAuthorizeResponse response);
+        Task StoreDownstreamIdTokenResponseAsync(string key, DownstreamAuthorizeResponse response);
         Task StoreDownstreamCustomDataAsync(string key, Dictionary<string,object> custom);
-        Task<FinalDownstreamAuthorizeResponse> GetDownstreamIdTokenResponseAsync(string key);
+        Task<DownstreamAuthorizeResponse> GetDownstreamIdTokenResponseAsync(string key);
         Task DeleteStoredCacheAsync(string key);
     }
 }

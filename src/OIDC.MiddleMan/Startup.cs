@@ -45,7 +45,7 @@ namespace OIDC.ReferenceWebClient
             section = Configuration.GetSection("oidcOptionStore");
             var oidcSchemeRecords = new Dictionary<string, OIDCSchemeRecord>();
             section.Bind(oidcSchemeRecords);
-            services.AddTransient<IClientSecretStore>(sp =>
+            services.AddTransient<IOIDCPipelineClientStore>(sp =>
             {
                 return new InMemoryClientSecretStore(oidcSchemeRecords);
             });

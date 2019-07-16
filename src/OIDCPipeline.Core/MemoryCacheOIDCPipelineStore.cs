@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using OIDCPipeline.Core.Configuration;
+using OIDCPipeline.Core.Endpoints.ResponseHandling;
 using OIDCPipeline.Core.Validation.Models;
 using System;
 using System.Collections.Generic;
@@ -24,29 +25,31 @@ namespace OIDCPipeline.Core
 
         public Task DeleteStoredCacheAsync(string id)
         {
-            _memoryCache.Remove(OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id));
-            _memoryCache.Remove(OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
+            var keyOriginal = OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id);
+            var keyDownstream = OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id);
+            _memoryCache.Remove(keyOriginal);
+            _memoryCache.Remove(keyDownstream);
             return Task.CompletedTask;
         }
 
-        public Task<FinalDownstreamAuthorizeResponse> GetDownstreamIdTokenResponseAsync(string id)
+        public Task<DownstreamAuthorizeResponse> GetDownstreamIdTokenResponseAsync(string id)
         {
-            var result = _memoryCache.Get<FinalDownstreamAuthorizeResponse>(
-                OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
+            var key = OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id);
+            var result = _memoryCache.Get<DownstreamAuthorizeResponse>(key);
             return Task.FromResult(result);
         }
 
         public Task<ValidatedAuthorizeRequest> GetOriginalIdTokenRequestAsync(string id)
         {
-            var result = _memoryCache.Get<ValidatedAuthorizeRequest>(
-                OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id));
+            var key = OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id);
+            var result = _memoryCache.Get<ValidatedAuthorizeRequest>(key);
             return Task.FromResult(result);
         }
 
         public Task StoreDownstreamCustomDataAsync(string id, Dictionary<string, object> custom)
         {
-            var result = _memoryCache.Get<FinalDownstreamAuthorizeResponse>(
-                   OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id));
+            var key = OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id);
+            var result = _memoryCache.Get<DownstreamAuthorizeResponse>(key);
             if(result == null)
             {
                 throw new Exception("Does not exist");
@@ -55,10 +58,11 @@ namespace OIDCPipeline.Core
             return StoreDownstreamIdTokenResponseAsync(id, result);
         }
 
-        public Task StoreDownstreamIdTokenResponseAsync(string id, FinalDownstreamAuthorizeResponse response)
+        public Task StoreDownstreamIdTokenResponseAsync(string id, DownstreamAuthorizeResponse response)
         {
+            var key = OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id);
             _memoryCache.Set(
-                OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id), 
+                key, 
                 response, 
                 TimeSpan.FromMinutes(_options.ExpirationMinutes));
             return Task.CompletedTask;
@@ -66,8 +70,9 @@ namespace OIDCPipeline.Core
 
         public Task StoreOriginalIdTokenRequestAsync(string id, ValidatedAuthorizeRequest request)
         {
+            var key = OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id);
             _memoryCache.Set(
-                OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id), 
+                key, 
                 request, 
                 TimeSpan.FromMinutes(_options.ExpirationMinutes));
             return Task.CompletedTask;

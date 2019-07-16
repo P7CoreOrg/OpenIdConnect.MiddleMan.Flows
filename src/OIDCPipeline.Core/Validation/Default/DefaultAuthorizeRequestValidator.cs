@@ -16,12 +16,12 @@ namespace OIDCPipeline.Core.Validation.Default
     internal class DefaultAuthorizeRequestValidator : IAuthorizeRequestValidator
     {
         private OIDCPipelineOptions _options;
-        private IClientSecretStore _clientSecretStore;
+        private IOIDCPipelineClientStore _clientSecretStore;
         private ILogger<DefaultAuthorizeRequestValidator> _logger;
 
         public DefaultAuthorizeRequestValidator(
             OIDCPipelineOptions options,
-            IClientSecretStore clientSecretStore,
+            IOIDCPipelineClientStore clientSecretStore,
             ILogger<DefaultAuthorizeRequestValidator> logger)
         {
             _options = options;

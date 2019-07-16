@@ -1,4 +1,5 @@
-﻿using OIDCPipeline.Core.Extensions;
+﻿using OIDCPipeline.Core.Endpoints.ResponseHandling;
+using OIDCPipeline.Core.Extensions;
 
 namespace OIDCPipeline.Core.Validation.Models
 {
@@ -18,6 +19,6 @@ namespace OIDCPipeline.Core.Validation.Models
         public string ErrorDescription { get; set; }
         public bool IsError => Error.IsPresent();
 
-        public FinalDownstreamAuthorizeResponse Downstream { get; internal set; }
+        public DownstreamAuthorizeResponse Downstream { get; internal set; }
     }
 }

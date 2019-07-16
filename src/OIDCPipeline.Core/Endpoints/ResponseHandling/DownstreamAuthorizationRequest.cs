@@ -1,8 +1,8 @@
 ﻿using System.Collections.Specialized;
 
-namespace OIDCPipeline.Core
+namespace OIDCPipeline.Core.Endpoints.ResponseHandling
 {
-    internal class IdTokenAuthorizationRequest
+    internal class DownstreamAuthorizationRequest
     {
         public NameValueCollection ExtraValues { get; set; }
 

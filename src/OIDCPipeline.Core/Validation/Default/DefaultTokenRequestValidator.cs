@@ -1,4 +1,4 @@
-﻿ 
+﻿
 using Microsoft.Extensions.Logging;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Extensions;
@@ -10,20 +10,21 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Text;
 using IdentityModel;
+using OIDCPipeline.Core.Endpoints.ResponseHandling;
 
 namespace OIDCPipeline.Core.Validation
 {
     internal class DefaultTokenRequestValidator : ITokenRequestValidator
     {
         private OIDCPipelineOptions _options;
-        private IClientSecretStore _clientSecretStore;
+        private IOIDCPipelineClientStore _clientSecretStore;
         private IOIDCPipelineStore _oidcPipelineStore;
         private ILogger<DefaultTokenRequestValidator> _logger;
         private ValidatedTokenRequest _validatedRequest;
 
         public DefaultTokenRequestValidator(
             OIDCPipelineOptions options,
-            IClientSecretStore clientSecretStore,
+            IOIDCPipelineClientStore clientSecretStore,
             IOIDCPipelineStore oidcPipelineStore,
             ILogger<DefaultTokenRequestValidator> logger)
         {
@@ -174,7 +175,7 @@ namespace OIDCPipeline.Core.Validation
 
             return Valid();
         }
-        private TokenRequestValidationResult ValidateAuthorizationCodeWithProofKeyParameters(string codeVerifier, FinalDownstreamAuthorizeResponse idTokenResopnse)
+        private TokenRequestValidationResult ValidateAuthorizationCodeWithProofKeyParameters(string codeVerifier, DownstreamAuthorizeResponse idTokenResopnse)
         {
             if (idTokenResopnse.Request.CodeChallenge.IsMissing() || idTokenResopnse.Request.CodeChallengeMethod.IsMissing())
             {

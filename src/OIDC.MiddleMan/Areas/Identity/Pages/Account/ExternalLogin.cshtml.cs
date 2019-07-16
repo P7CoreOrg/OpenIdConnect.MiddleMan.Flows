@@ -16,6 +16,7 @@ using OIDC.ReferenceWebClient.Data;
 using OIDC.ReferenceWebClient.Extensions;
 using OIDC.ReferenceWebClient.Models;
 using OIDCPipeline.Core;
+using OIDCPipeline.Core.Endpoints.ResponseHandling;
 
 namespace OIDC.ReferenceWebClient.Areas.Identity.Pages.Account
 {
@@ -100,7 +101,7 @@ namespace OIDC.ReferenceWebClient.Areas.Identity.Pages.Account
                 return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
             }
             var oidc = await HarvestOidcDataAsync();
-            FinalDownstreamAuthorizeResponse idTokenResponse = new FinalDownstreamAuthorizeResponse
+            DownstreamAuthorizeResponse idTokenResponse = new DownstreamAuthorizeResponse
             {
                 AccessToken = oidc["access_token"],
                 ExpiresAt = oidc["expires_at"],

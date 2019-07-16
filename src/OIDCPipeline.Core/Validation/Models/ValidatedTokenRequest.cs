@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using OIDCPipeline.Core.Endpoints.ResponseHandling;
+using System.Collections.Generic;
 
 namespace OIDCPipeline.Core.Validation.Models
 {
@@ -18,7 +19,7 @@ namespace OIDCPipeline.Core.Validation.Models
         /// <value>
         /// The authorization code.
         /// </value>
-        public FinalDownstreamAuthorizeResponse IdTokenResponse { get; set; }
+        public DownstreamAuthorizeResponse IdTokenResponse { get; set; }
 
         /// <summary>
         /// Gets or sets the authorization code handle.

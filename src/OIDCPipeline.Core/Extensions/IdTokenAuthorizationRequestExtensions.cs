@@ -1,4 +1,5 @@
 ﻿using IdentityModel;
+using OIDCPipeline.Core.Endpoints.ResponseHandling;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -19,7 +20,7 @@ namespace OIDCPipeline.Core.Extensions
             OidcConstants.AuthorizeRequest.State,
             OidcConstants.AuthorizeRequest.Scope
         };
-        public static IdTokenAuthorizationRequest ToIdTokenAuthorizationRequest(this NameValueCollection values)
+        public static DownstreamAuthorizationRequest ToDownstreamAuthorizationRequest(this NameValueCollection values)
         {
             var extraNames = new List<string>();
             foreach (var item in values.AllKeys)
@@ -29,7 +30,7 @@ namespace OIDCPipeline.Core.Extensions
                     extraNames.Add(item);
                 }
             }
-            var idTokenAuthorizationRequest = new IdTokenAuthorizationRequest
+            var idTokenAuthorizationRequest = new DownstreamAuthorizationRequest
             {
                 client_id = values.Get(OidcConstants.AuthorizeRequest.ClientId),
                 client_secret = values.Get("client_secret"),

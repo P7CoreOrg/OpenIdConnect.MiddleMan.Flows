@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityModel;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,7 @@ using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 
 using OIDC.ReferenceWebClient.Extensions;
 using OIDCPipeline.Core;
+using OIDCPipeline.Core.Endpoints.ResponseHandling;
 using OpenIdConntectModels;
 
 namespace OIDC.ReferenceWebClient.InMemoryIdentity
@@ -113,15 +115,17 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                         {
                             oidcMessage = context.TokenEndpointResponse;
                         }
+
+                        var userState = context.ProtocolMessage.Parameters["state"].Split('.')[0];
+
                         var header = new JwtHeader();
                         var handler = new JwtSecurityTokenHandler();
                         var idToken = handler.ReadJwtToken(oidcMessage.IdToken);
                         var claims = idToken.Claims.ToList();
-                        var nonce = (from item in claims where item.Type == OidcConstants.AuthorizeRequest.Nonce select item).FirstOrDefault();
+                
+                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(userState);
 
-                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(nonce.Value);
-
-                        FinalDownstreamAuthorizeResponse idTokenResponse = new FinalDownstreamAuthorizeResponse
+                        DownstreamAuthorizeResponse idTokenResponse = new DownstreamAuthorizeResponse
                         {
                             Request = stored,
                             AccessToken = oidcMessage.AccessToken,
@@ -131,15 +135,15 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             TokenType = oidcMessage.TokenType,
                             LoginProvider = scheme
                         };
-                        await pipeLineStore.StoreDownstreamIdTokenResponseAsync(nonce.Value,idTokenResponse);
+                        await pipeLineStore.StoreDownstreamIdTokenResponseAsync(userState, idTokenResponse);
 
                     };
                     options.Events.OnRedirectToIdentityProvider = async context =>
                     {
-                        string nonce = context.HttpContext.GetOIDCPipeLineKey();
+                        string key = context.HttpContext.GetOIDCPipeLineKey();
                         var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
-                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(nonce);
-                        var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IClientSecretStore>();
+                        var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(key);
+                        var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineClientStore>();
 
                         if (stored != null)
                         {
@@ -147,7 +151,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             context.Options.ClientId = stored.ClientId;
                             context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme, 
                                 stored.ClientId);
-
+                            context.ProtocolMessage.State = $"{key}.";
                         }
                      
                         context.Options.Authority = context.Options.Authority;
@@ -172,7 +176,14 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                             var item = stored.Raw[allowedParam];
                             if(item != null)
                             {
-                                context.ProtocolMessage.SetParameter(allowedParam, item);
+                                if(string.Compare(allowedParam,"state",true) == 0)
+                                {
+                                    context.ProtocolMessage.SetParameter(allowedParam, $"{key}.{item}");
+                                }
+                                else
+                                {
+                                    context.ProtocolMessage.SetParameter(allowedParam, item);
+                                }
                             }
                         }
                         /*

@@ -16,6 +16,7 @@ using OIDC.ReferenceWebClient.Data;
 using OIDC.ReferenceWebClient.Extensions;
 using OIDC.ReferenceWebClient.Models;
 using OIDCPipeline.Core;
+using OIDCPipeline.Core.Endpoints.ResponseHandling;
 
 namespace OIDC.ReferenceWebClient.Pages
 {
@@ -33,7 +34,7 @@ namespace OIDC.ReferenceWebClient.Pages
             _oidcPipelineStore = oidcPipelineStore;
         }
         public List<Claim> Claims { get; set; }
-        public FinalDownstreamAuthorizeResponse IdTokenResponse { get; private set; }
+        public DownstreamAuthorizeResponse IdTokenResponse { get; private set; }
 
         public async Task OnGet()
         {
