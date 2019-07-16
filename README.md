@@ -1,4 +1,4 @@
-# OpenIdConnect.MiddleMan.Flows
+# OpenIdConnect.Orchestrator.Flows
 Sometimes just doing a login isn't enough
 
 There is login and then there are followup pages that have nothing to do with the IDP.  Just because someone has a valid account on some IDP (i.e. you are using google as your main idp), doesn't mean that the user has an account on your platform.  Those follow up "sign up" are not googles, they are yours.  This is where you vet the user and perhaps ask for money before you burn resources on your end to make a real account.  
