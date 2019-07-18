@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModelExtras.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using OIDC.ReferenceWebClient.Data;
 using OIDC.ReferenceWebClient.Discovery;
 using OIDC.ReferenceWebClient.InMemoryIdentity;
@@ -20,7 +22,6 @@ using OpenIdConntectModels;
 
 namespace OIDC.ReferenceWebClient
 {
- 
     public static class Global
     {
         public static IServiceProvider ServiceProvider { get; set; }
@@ -37,6 +38,9 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            services.AddDefaultHttpClientFactory();
+
+
             var openIdConnectSchemeRecordSchemeRecords = new List<OpenIdConnectSchemeRecord>();
             var section = Configuration.GetSection("openIdConnect");
             section.Bind(openIdConnectSchemeRecordSchemeRecords);

@@ -18,11 +18,13 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.Extensions.Logging.AzureAppServices" Version="2.2.5" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\Identity.Contrib.InMemoryStore\Identity.Contrib.InMemoryStore.csproj" />
+    <ProjectReference Include="..\IdentityModelExtras\IdentityModelExtras.csproj" />
     <ProjectReference Include="..\OIDCPipeline.Core\OIDCPipeline.Core.csproj" />
     <ProjectReference Include="..\OpenIdConntectModels\OpenIdConntectModels.csproj" />
 
