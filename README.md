@@ -67,6 +67,7 @@ Given a mobile app, lets call it **ThudApp**, it will have a **client_id/client_
 
 For securet and trusted clients, like a good ole web application, the web application can still point to the **Orchestrator** as its OIDC Authority.  However in this case, the trusted app can pass allong the **client_secret**, but as usuall the **redirect_uri** must still point to the **Orchestrator**.
 
+The following [configuration](src/OIDC.MiddleMan/appsettings.Development.json) shows that the **Orchestrator** app is in possession of a **client_id/client_secret** that wass issued by Google.  
 
 
 
