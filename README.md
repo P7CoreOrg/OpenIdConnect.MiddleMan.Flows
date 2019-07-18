@@ -8,10 +8,8 @@ This project demos that process and advertises itself as a compliant OIDC provid
 ![PlantUML model](http://www.plantuml.com/plantuml/png/5SqngiCm383X_PtYzG2rnaAdW6cXT72kuCeY3jYIaMHo_JRJ3__oBUPPVVRsTzaPsomqjVrNzs5t0Cr7s7QlypED58MTs0DAX_KMHIdf1caGlqeKPa8FIR6IkMON3SycXq7FvgHG10tMTtnSpnt6QIx4vTSl)
 
 
-The OIDCPipeline.Core DiscoveryEndpoint calls googles [Discovery Document](https://accounts.google.com/.well-known/openid-configuration), replaces the authorization_endpoint with our own.  We are telling clients that we are the authority and thanks to the fact that the response lets us point to other endpoints helps.  
+The OIDCPipeline.Core DiscoveryEndpoint calls googles [Discovery Document](https://accounts.google.com/.well-known/openid-configuration), replaces the **authorization_endpoint** and **token_endpoint** with our own.  We are telling clients that we are the authority and thanks to the fact that the response lets us point to other endpoints helps.  
 
-We are repacing the following;  
-**authorization_endpoint** and **token_endpoint**  
 ```
 {
 	"issuer": "https://accounts.google.com",
