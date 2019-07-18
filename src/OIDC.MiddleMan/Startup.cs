@@ -37,9 +37,9 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            var oAuth2SchemeRecords = new List<OAuth2SchemeRecord>();
-            var section = Configuration.GetSection("oauth2");
-            section.Bind(oAuth2SchemeRecords);
+            var openIdConnectSchemeRecordSchemeRecords = new List<OpenIdConnectSchemeRecord>();
+            var section = Configuration.GetSection("openIdConnect");
+            section.Bind(openIdConnectSchemeRecordSchemeRecords);
 
  
             section = Configuration.GetSection("oidcOptionStore");
@@ -57,7 +57,7 @@ namespace OIDC.ReferenceWebClient
             });
             var downstreamAuthortityScheme = Configuration["downstreamAuthorityScheme"];
 
-            var record = (from item in oAuth2SchemeRecords
+            var record = (from item in openIdConnectSchemeRecordSchemeRecords
                           where item.Scheme == downstreamAuthortityScheme
                           select item).FirstOrDefault();
 

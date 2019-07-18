@@ -36,7 +36,7 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
             });
 
             var section = configuration.GetSection("oauth2");
-            var oAuth2SchemeRecords = new List<OAuth2SchemeRecord>();
+            var oAuth2SchemeRecords = new List<OpenIdConnectSchemeRecord>();
             section.Bind(oAuth2SchemeRecords);
             foreach (var record in oAuth2SchemeRecords)
             {

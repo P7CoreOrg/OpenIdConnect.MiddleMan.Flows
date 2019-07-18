@@ -23,7 +23,7 @@ namespace OpenIdConntectModels
         }
     ]
     */
-    public class OAuth2SchemeRecord
+    public class OpenIdConnectSchemeRecord
     {
         public string Scheme { get; set; }
         public string ClientId { get; set; }

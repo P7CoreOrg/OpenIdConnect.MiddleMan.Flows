@@ -71,10 +71,10 @@ namespace OIDC.ReferenceWebClient.InMemoryIdentity
                 options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             });
 
-            var section = configuration.GetSection("oauth2");
-            var oAuth2SchemeRecords = new List<OAuth2SchemeRecord>();
-            section.Bind(oAuth2SchemeRecords);
-            foreach (var record in oAuth2SchemeRecords)
+            var section = configuration.GetSection("openIdConnect");
+            var openIdConnectSchemeRecordSchemeRecords = new List<OpenIdConnectSchemeRecord>();
+            section.Bind(openIdConnectSchemeRecordSchemeRecords);
+            foreach (var record in openIdConnectSchemeRecordSchemeRecords)
             {
                 var scheme = record.Scheme;
                 authenticationBuilder.AddOpenIdConnect(scheme, scheme, options =>
