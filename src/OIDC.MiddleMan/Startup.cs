@@ -38,8 +38,6 @@ namespace OIDC.ReferenceWebClient
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddDefaultHttpClientFactory();
-
 
             var openIdConnectSchemeRecordSchemeRecords = new List<OpenIdConnectSchemeRecord>();
             var section = Configuration.GetSection("openIdConnect");
@@ -65,11 +63,26 @@ namespace OIDC.ReferenceWebClient
                           where item.Scheme == downstreamAuthortityScheme
                           select item).FirstOrDefault();
 
-
             services.AddOIDCPipeline(options =>
             {
                 //     options.DownstreamAuthority = "https://accounts.google.com";
                 options.DownstreamAuthority = record.Authority;
+            });
+
+ 
+
+            services.AddHttpClient("downstreamDocument", (a, b) =>
+            {
+                 
+            });
+            services.AddHttpClient("github", c =>
+            {
+               
+                c.BaseAddress = new Uri("https://api.github.com/");
+                // Github API versioning
+                c.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+                // Github requires a user-agent
+                c.DefaultRequestHeaders.Add("User-Agent", "HttpClientFactory-Sample");
             });
             services.AddTransient<ISigninManager, OIDCPipelineSigninManager>();
             services.Configure<CookiePolicyOptions>(options =>

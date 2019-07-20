@@ -57,7 +57,6 @@ namespace XUnitTest_Core
         public async Task Base_address_should_work()
         {
  
-            DownstreamDiscoveryCache dd;
             var client = new HttpClient(_mockHttp)
             {
                 BaseAddress = new Uri(_endpoint)
