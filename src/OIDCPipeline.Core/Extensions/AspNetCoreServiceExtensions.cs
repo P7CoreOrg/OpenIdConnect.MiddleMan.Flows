@@ -42,18 +42,25 @@ namespace OIDCPipeline.Core.Extensions
         internal static IServiceCollection AddRequiredPlatformServices(this IServiceCollection services)
         {
 
-            services.AddOptions();
+          
             services.AddSingleton(
                 resolver => resolver.GetRequiredService<IOptions<OIDCPipelineOptions>>().Value);
 
             return services;
         }
+        private static void AddOIDCPipelineOptions(
+            this IServiceCollection services, 
+            Action<OIDCPipelineOptions> setupAction)
+        {
+            services.AddOptions();
+            services.Configure(setupAction);
+        }
         public static void AddOIDCPipeline(
             this IServiceCollection services, 
             Action<OIDCPipelineOptions> setupAction)
         {
+            services.AddOIDCPipelineOptions(setupAction);  // do first
             services.AddRequiredPlatformServices();
-            services.Configure(setupAction);
             services.AddTransient<IOIDCResponseGenerator, OIDCResponseGenerator>();
             services.TryAddTransient<IAuthorizeRequestValidator, DefaultAuthorizeRequestValidator>();
             services.TryAddTransient<ITokenRequestValidator, DefaultTokenRequestValidator>();
