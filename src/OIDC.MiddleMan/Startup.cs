@@ -34,11 +34,19 @@ namespace OIDC.ReferenceWebClient
         }
 
         public IConfiguration Configuration { get; }
-
+        readonly string MyAllowEverything = "CorsPolicy";
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowEverything,
+                    corsBuilder => corsBuilder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
             var openIdConnectSchemeRecordSchemeRecords = new List<OpenIdConnectSchemeRecord>();
             var section = Configuration.GetSection("openIdConnect");
             section.Bind(openIdConnectSchemeRecordSchemeRecords);
@@ -140,6 +148,7 @@ namespace OIDC.ReferenceWebClient
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseCors(MyAllowEverything);
 
             app.UseOIDCPipelineStore();
             app.UseAuthentication();
