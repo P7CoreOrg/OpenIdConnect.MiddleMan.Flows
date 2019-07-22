@@ -70,6 +70,16 @@ For securet and trusted clients, like a good ole web application, the web applic
 The following [configuration](src/OIDC.MiddleMan/appsettings.Development.json) shows that the **Orchestrator** app is in possession of a **client_id/client_secret** that wass issued by Google.  
 
 
+## Example Clients
+[oidc-js](https://github.com/IdentityModel/oidc-client-js)  
+To make this work;
+1. change the authority to be this server.  
+2. use the same google client_id as in the Native App.  
+This oidc-client-js correctly implements the client side code flow.  
+
+[NativeConsolePKCEClient](src/NativeConsolePKCEClient)  
+
+
 
 
 
