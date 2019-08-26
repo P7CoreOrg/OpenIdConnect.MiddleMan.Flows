@@ -5,6 +5,7 @@
 using System;
 using System.Net.Http;
 using System.Security.Claims;
+using IdentityModel.Client;
 
 namespace IdentityModel.OidcClient
 {
@@ -85,5 +86,6 @@ namespace IdentityModel.OidcClient
         /// The refresh token handler.
         /// </value>
         public virtual HttpMessageHandler RefreshTokenHandler { get; internal set; }
+        public TokenResponse TokenResponse { get; internal set; }
     }
 }

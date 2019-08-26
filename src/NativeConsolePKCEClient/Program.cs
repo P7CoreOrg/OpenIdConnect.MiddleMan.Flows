@@ -11,7 +11,7 @@ namespace NativeConsolePKCEClient
     class Program
     {
         static string _clientId = "1096301616546-edbl612881t7rkpljp3qa3juminskulo.apps.googleusercontent.com";
-        static string _authority = "https://localhost:5001";
+        static string _authority = "https://localhost:6001";
 
         static OidcClient _oidcClient;
        
@@ -66,8 +66,7 @@ namespace NativeConsolePKCEClient
                     return Task.CompletedTask;
                 }
             });
-            var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(rvr.TokenResponse.Raw);
-            ShowResult(result);
+             ShowResult(result);
             
         }
 
@@ -88,6 +87,14 @@ namespace NativeConsolePKCEClient
             Console.WriteLine($"\nidentity token: {result.IdentityToken}");
             Console.WriteLine($"access token:   {result.AccessToken}");
             Console.WriteLine($"refresh token:  {result?.RefreshToken ?? "none"}");
+
+            var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(result.TokenResponse.Raw);
+
+            Console.WriteLine($"");
+            foreach (var item in values)
+            {
+                Console.WriteLine($"{item.Key}: {item.Value}");
+            }
         }
 
     }
