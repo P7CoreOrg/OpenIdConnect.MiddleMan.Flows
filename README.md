@@ -3,7 +3,7 @@ Sometimes just doing a login isn't enough
 
 There is login and then there are followup pages that have nothing to do with the IDP.  Just because someone has a valid account on some IDP (i.e. you are using google as your main idp), doesn't mean that the user has an account on your platform.  Those follow up "sign up" are not googles, they are yours.  This is where you vet the user and perhaps ask for money before you burn resources on your end to make a real account.  
 
-This project demos that process and advertises itself as a compliant OIDC provider.  You are not and IDP, but an orchestrator whose interfrace to a mobile app is a standard that they can code against.
+This project demos that process and advertises itself as a compliant OIDC provider.  You are not an IDP, but an orchestrator whose interfrace to a mobile app is a standard that they can code against.
 
 ![PlantUML model](http://www.plantuml.com/plantuml/png/5SqngiCm383X_PtYzG2rnaAdW6cXT72kuCeY3jYIaMHo_JRJ3__oBUPPVVRsTzaPsomqjVrNzs5t0Cr7s7QlypED58MTs0DAX_KMHIdf1caGlqeKPa8FIR6IkMON3SycXq7FvgHG10tMTtnSpnt6QIx4vTSl)
 
