@@ -1,0 +1,9 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>OpenIdConnectModels</RootNamespace>
+    <AssemblyName>OpenIdConnectModels</AssemblyName>
+  </PropertyGroup>
+
+</Project>

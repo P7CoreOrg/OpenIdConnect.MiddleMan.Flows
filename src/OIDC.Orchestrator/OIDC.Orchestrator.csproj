@@ -27,6 +27,6 @@
     <ProjectReference Include="..\Identity.Contrib.InMemoryStore\Identity.Contrib.InMemoryStore.csproj" />
     <ProjectReference Include="..\IdentityModelExtras\IdentityModelExtras.csproj" />
     <ProjectReference Include="..\OIDCPipeline.Core\OIDCPipeline.Core.csproj" />
-    <ProjectReference Include="..\OpenIdConntectModels\OpenIdConntectModels.csproj" />
+    <ProjectReference Include="..\OpenIdConnectModels\OpenIdConntectModels.csproj" />
   </ItemGroup>
 </Project>

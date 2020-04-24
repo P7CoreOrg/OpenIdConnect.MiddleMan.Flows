@@ -12,7 +12,6 @@ using OIDC.Orchestrator.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using OpenIdConntectModels;
 using OIDCPipeline.Core;
 using OIDC.Orchestrator.Discovery;
 using OIDCPipeline.Core.Extensions;
@@ -21,6 +20,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using OpenIdConnectModels;
 
 namespace OIDC.Orchestrator
 {

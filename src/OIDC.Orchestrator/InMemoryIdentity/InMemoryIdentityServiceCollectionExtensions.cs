@@ -15,11 +15,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using OIDC.Orchestrator.InMemoryIdentity;
-
-
 using OIDCPipeline.Core;
 using OIDCPipeline.Core.Endpoints.ResponseHandling;
-using OpenIdConntectModels;
+using OpenIdConnectModels;
 
 namespace OIDC.Orchestrator.InMemoryIdentity
 {
