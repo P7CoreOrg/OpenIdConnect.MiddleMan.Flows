@@ -11,7 +11,7 @@ namespace NativeConsolePKCEClient
     class Program
     {
         static string _clientId = "1096301616546-edbl612881t7rkpljp3qa3juminskulo.apps.googleusercontent.com";
-        static string _authority = "https://localhost:6001";
+        static string _authority = "https://localhost:6601";
 
         static OidcClient _oidcClient;
        

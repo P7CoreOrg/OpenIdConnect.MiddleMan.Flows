@@ -10,11 +10,8 @@ namespace OIDC.ReferenceWebClient.Discovery
 
     internal class DownstreamDiscoveryCache : DiscoveryCache, IDownstreamDiscoveryCache
     {
-        public DownstreamDiscoveryCache(DiscoveryClient client) : base(client)
-        {
-        }
 
-        public DownstreamDiscoveryCache(string authority, HttpClient client = null, DiscoveryPolicy policy = null) : base(authority, client, policy)
+        public DownstreamDiscoveryCache(string authority, DiscoveryPolicy policy = null) : base(authority, policy)
         {
         }
 

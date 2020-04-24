@@ -22,7 +22,8 @@ namespace OIDC.ReferenceWebClient
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args).ConfigureAppConfiguration((hostingContext, config) =>
+            WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((hostingContext, config) =>
                 {
                     var environmentName = hostingContext.HostingEnvironment.EnvironmentName;
                     LoadConfigurations(config, environmentName);

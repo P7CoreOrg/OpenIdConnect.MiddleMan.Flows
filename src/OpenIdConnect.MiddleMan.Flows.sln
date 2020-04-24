@@ -21,9 +21,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{18340005
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestServerFixture", "TestServerFixture\TestServerFixture.csproj", "{3E404A6A-66C0-4EBF-A550-B536D2B54BAE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityModelExtras", "IdentityModelExtras\IdentityModelExtras.csproj", "{AA88E28B-004B-4D36-AA36-D7C939DEE10F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityModelExtras", "IdentityModelExtras\IdentityModelExtras.csproj", "{AA88E28B-004B-4D36-AA36-D7C939DEE10F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest_Core", "XUnitTest_Core\XUnitTest_Core.csproj", "{E65B572D-0EFB-4284-B8F5-4E5CE3C83B06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTest_Core", "XUnitTest_Core\XUnitTest_Core.csproj", "{E65B572D-0EFB-4284-B8F5-4E5CE3C83B06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIDC.Orchestrator", "OIDC.Orchestrator\OIDC.Orchestrator.csproj", "{9F0F94BD-5673-4A56-A3EA-AD6E94121B1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{E65B572D-0EFB-4284-B8F5-4E5CE3C83B06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E65B572D-0EFB-4284-B8F5-4E5CE3C83B06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E65B572D-0EFB-4284-B8F5-4E5CE3C83B06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F0F94BD-5673-4A56-A3EA-AD6E94121B1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F0F94BD-5673-4A56-A3EA-AD6E94121B1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F0F94BD-5673-4A56-A3EA-AD6E94121B1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F0F94BD-5673-4A56-A3EA-AD6E94121B1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

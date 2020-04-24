@@ -22,10 +22,6 @@ using OpenIdConntectModels;
 
 namespace OIDC.ReferenceWebClient
 {
-    public static class Global
-    {
-        public static IServiceProvider ServiceProvider { get; set; }
-    }
     public class Startup
     {
         public Startup(IConfiguration configuration)
