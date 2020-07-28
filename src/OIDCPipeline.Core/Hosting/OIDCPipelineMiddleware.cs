@@ -7,6 +7,12 @@ using System.Threading.Tasks;
 
 namespace OIDCPipeline.Core.Hosting
 {
+    class ResponseState
+    {
+        public HttpContext HttpContext { get; set; }
+        public Dictionary<string, string> CookieItems { get; set; }
+        public IEndpointResult EndpointResult { get; internal set; }
+    }
     internal class OIDCPipelineMiddleware
     {
         private readonly RequestDelegate _next;
@@ -32,8 +38,17 @@ namespace OIDCPipeline.Core.Hosting
 
                     if (result != null)
                     {
+                        
                         _logger.LogTrace("Invoking result: {type}", result.GetType().FullName);
-                        await result.ExecuteAsync(context);
+                        var state = new ResponseState
+                        {
+                            EndpointResult = result,
+                            HttpContext = context,
+                            CookieItems = new Dictionary<string, string>()
+                        };
+                      
+                        state.CookieItems["herb"] = "stahl";
+                        context.Response.OnStarting(OnStartingCallBack,state);
                     }
 
                     return;
@@ -46,6 +61,27 @@ namespace OIDCPipeline.Core.Hosting
             }
 
             await _next(context);
+        }
+        private async Task OnStartingCallBack(object state)
+        {
+            var responseState = state as ResponseState;
+            var cookieOptions = new CookieOptions()
+            {
+                Path = "/",
+                Expires = DateTimeOffset.UtcNow.AddHours(1),
+                IsEssential = true,
+                HttpOnly = false,
+                Secure = false,
+            };
+            foreach(var item in responseState.CookieItems)
+            {
+                responseState.HttpContext.Response.Cookies.Append(item.Key, item.Value, cookieOptions);
+             
+            }
+            await responseState.EndpointResult.ExecuteAsync(responseState.HttpContext);
+
+            
+
         }
     }
 }

@@ -47,8 +47,10 @@ namespace OIDCPipeline.Core.Endpoints
         }
         public async Task<IEndpointResult> ProcessAsync(HttpContext context)
         {
+            string key = null;
             try
             {
+                
                 var request = new ValidatedAuthorizeRequest();
 
                 _logger.LogInformation("Process AuthorizeEndpoint Start.._signinManager.SignOutAsync() ");
@@ -103,7 +105,7 @@ namespace OIDCPipeline.Core.Endpoints
                     }
                     var downstreamAuthorizationRequest = values.ToDownstreamAuthorizationRequest();
 
-                    var key = context.GetOIDCPipeLineKey();
+                    key = context.GetOIDCPipeLineKey();
                     if (!string.IsNullOrWhiteSpace(key))
                     {
                         _logger.LogInformation($"DeleteStoredCacheAsync previouse if it exists");
@@ -113,7 +115,7 @@ namespace OIDCPipeline.Core.Endpoints
                     // Initially was using the NONCE as the key, but we can't trust that clients will not hardcode a nonce
                     // The key has to be generated on our side and subsequently stored as a cookie.
                     key = Guid.NewGuid().ToString("N");
-                    context.SetOIDCPipeLineKey(key);
+                  //  context.SetOIDCPipeLineKey(key);
 
                     _logger.LogInformation($"StoreOriginalIdTokenRequestAsync clientid:{downstreamAuthorizationRequest.client_id}");
                     await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(key, result.ValidatedAuthorizeRequest);
@@ -127,12 +129,12 @@ namespace OIDCPipeline.Core.Endpoints
                 _logger.LogInformation($"redirecting to:{redirectUrl}");
              
 
-                return new Results.OriginalAuthorizeResult(redirectUrl);
+                return new Results.OriginalAuthorizeResult(redirectUrl,key);
             }
             catch (Exception ex)
             {
                 string redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookErrorRedirectUrl}";
-                return new Results.OriginalAuthorizeResult(redirectUrl);
+                return new Results.OriginalAuthorizeResult(redirectUrl, key);
             }
         }
          

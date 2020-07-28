@@ -88,7 +88,7 @@ namespace NativeConsolePKCEClient
             Console.WriteLine($"access token:   {result.AccessToken}");
             Console.WriteLine($"refresh token:  {result?.RefreshToken ?? "none"}");
 
-            var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(result.TokenResponse.Raw);
+            var values = JsonConvert.DeserializeObject<Dictionary<string, object>>(result.TokenResponse.Raw);
 
             Console.WriteLine($"");
             foreach (var item in values)

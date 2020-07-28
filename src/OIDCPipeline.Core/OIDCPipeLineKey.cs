@@ -8,13 +8,14 @@ namespace OIDCPipeline.Core
 {
     public static class OIDCPipeLineKey
     {
+        public const string KeyName = ".oidc.Nonce.Tracker";
         public static void SetOIDCPipeLineKey(this HttpContext context,string value)
         {
-            context.SetStringCookie(".oidc.Nonce.Tracker", value, 60);
+            context.SetStringCookie(KeyName, value, 60);
         }
         public static string GetOIDCPipeLineKey(this HttpContext context)
         {
-            string key = context.GetStringCookie(".oidc.Nonce.Tracker");
+            string key = context.GetStringCookie(KeyName);
             return key;
         }
     }

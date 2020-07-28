@@ -9,7 +9,10 @@ namespace Microsoft.AspNetCore.Mvc
     {
         public static void SetStringCookie(this HttpResponse response, string key, string value, int? expireTime)
         {
-            CookieOptions option = new CookieOptions();
+            CookieOptions option = new CookieOptions()
+            {
+                IsEssential = true
+            };
 
             if (expireTime.HasValue)
                 option.Expires = DateTime.Now.AddMinutes(expireTime.Value);
