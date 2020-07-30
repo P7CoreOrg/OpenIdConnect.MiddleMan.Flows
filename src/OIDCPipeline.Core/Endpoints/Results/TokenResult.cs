@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using Common;
 using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using OIDCPipeline.Core.Endpoints.ResponseHandling;
@@ -41,7 +42,7 @@ namespace OIDCPipeline.Core.Endpoints.Results
             };
             var json = _serializer.Serialize(dto);
             await context.Response.WriteJsonAsync(json);
-           
+
         }
 
         internal class ResultDto
@@ -51,7 +52,7 @@ namespace OIDCPipeline.Core.Endpoints.Results
             public int expires_in { get; set; }
             public string token_type { get; set; }
             public string refresh_token { get; set; }
-            public Dictionary<string,object> custom { get; set; }
+            public Dictionary<string, object> custom { get; set; }
         }
     }
 }

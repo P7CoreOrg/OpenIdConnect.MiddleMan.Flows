@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
@@ -33,7 +34,7 @@ namespace OIDCPipeline.Core
             var keyDownstream = OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id);
             await _cache.RemoveAsync(keyOriginal);
             await _cache.RemoveAsync(keyDownstream);
-           
+
         }
 
         public async Task<DownstreamAuthorizeResponse> GetDownstreamIdTokenResponseAsync(string id)
@@ -54,9 +55,9 @@ namespace OIDCPipeline.Core
         {
             var key = OIDCPipleLineStoreUtils.GenerateDownstreamIdTokenResponseKey(id);
             var result = await _cache.GetAsync(key);
-            var value =  _binarySerializer.Deserialize<DownstreamAuthorizeResponse>(result);
+            var value = _binarySerializer.Deserialize<DownstreamAuthorizeResponse>(result);
 
-            if(value == null)
+            if (value == null)
             {
                 throw new Exception("Does not exist");
             }
@@ -73,13 +74,13 @@ namespace OIDCPipeline.Core
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(_options.ExpirationMinutes)
             };
             await _cache.SetAsync(key, data, options);
-           
+
         }
 
         public async Task StoreOriginalIdTokenRequestAsync(string id, ValidatedAuthorizeRequest request)
         {
             var key = OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id);
-           
+
             var data = _binarySerializer.Serialize(request);
             DistributedCacheEntryOptions options = new DistributedCacheEntryOptions
             {

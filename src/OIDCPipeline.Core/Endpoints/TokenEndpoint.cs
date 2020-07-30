@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
+using Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using OIDCPipeline.Core.Configuration;
@@ -48,7 +49,7 @@ namespace OIDCPipeline.Core.Endpoints
                 {
                     if (!context.Request.HasFormContentType)
                     {
-                        return new StatusCodeResult( StatusCodes.Status415UnsupportedMediaType);
+                        return new StatusCodeResult(StatusCodes.Status415UnsupportedMediaType);
                     }
 
                     values = context.Request.Form.AsNameValueCollection();
@@ -63,7 +64,7 @@ namespace OIDCPipeline.Core.Endpoints
                     throw new Exception(validatedResult.ErrorDescription);
                 }
                 var downstream = validatedResult.Request.IdTokenResponse;
-                 
+
                 var tokenResponse = new TokenResponse()
                 {
                     IdentityToken = downstream.IdToken,
@@ -71,7 +72,7 @@ namespace OIDCPipeline.Core.Endpoints
                     AccessTokenLifetime = Convert.ToInt32(downstream.ExpiresAt),
                     Custom = downstream.Custom
                 };
-                var result = new TokenResult(tokenResponse,_serializer);
+                var result = new TokenResult(tokenResponse, _serializer);
                 return result;
             }
             catch (Exception ex)

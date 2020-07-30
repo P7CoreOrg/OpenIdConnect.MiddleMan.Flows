@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Identity.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OpenIdConnectModels;
+using Common;
 
 namespace OIDC.Orchestrator
 {
@@ -146,9 +147,9 @@ namespace OIDC.Orchestrator
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(
-            IApplicationBuilder app, 
-            IWebHostEnvironment env, 
-            IServiceProvider serviceProvider, 
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IServiceProvider serviceProvider,
             ILogger<Startup> logger)
         {
             try
@@ -195,7 +196,7 @@ namespace OIDC.Orchestrator
                 app.UseAuthentication();
                 app.UseAuthorization();
                 app.UseSession();
- 
+
                 app.UseEndpoints(endpoints =>
                 {
                     endpoints.MapRazorPages();
