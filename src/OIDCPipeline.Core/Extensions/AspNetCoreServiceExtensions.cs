@@ -78,6 +78,12 @@ namespace OIDCPipeline.Core.Extensions
             services.Configure(setupAction);
             services.AddTransient<IOIDCPipelineStore, MemoryCacheOIDCPipelineStore>();
         }
+        public static void AddDistributedCacheOIDCPipelineStore(this IServiceCollection services, Action<MemoryCacheOIDCPipelineStoreOptions> setupAction)
+        {
+            services.Configure(setupAction);
+            services.AddTransient<IOIDCPipelineStore, DistributedCacheOIDCPipelineStore>();
+        }
+
         public static IApplicationBuilder UseOIDCPipelineStore(this IApplicationBuilder app)
         {
             app.UseMiddleware<OIDCPipelineMiddleware>();

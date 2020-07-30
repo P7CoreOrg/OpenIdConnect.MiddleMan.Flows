@@ -20,7 +20,7 @@ namespace OIDCPipeline.Core.Extensions
             OidcConstants.AuthorizeRequest.State,
             OidcConstants.AuthorizeRequest.Scope
         };
-        public static DownstreamAuthorizationRequest ToDownstreamAuthorizationRequest(this NameValueCollection values)
+        public static DownstreamAuthorizationRequest ToDownstreamAuthorizationRequest(this SimpleNameValueCollection values)
         {
             var extraNames = new List<string>();
             foreach (var item in values.AllKeys)

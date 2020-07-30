@@ -45,6 +45,9 @@ namespace OIDC.Orchestrator
             try
             {
                 _logger.LogInformation($"ConfigureServices");
+                services.AddSingleton<IBinarySerializer, BinarySerializer>();
+                services.AddSingleton<ISerializer, Serializer>();
+                services.AddDistributedMemoryCache();
                 services.AddCors(options =>
                 {
                     options.AddPolicy(MyAllowEverything,
@@ -67,10 +70,16 @@ namespace OIDC.Orchestrator
                 });
                 services.AddHttpClient();
                 services.AddGoogleDiscoveryCache();
+                services.AddDistributedCacheOIDCPipelineStore(options =>
+                {
+                    options.ExpirationMinutes = 30;
+                });
+                /*
                 services.AddMemoryCacheOIDCPipelineStore(options =>
                 {
                     options.ExpirationMinutes = 30;
                 });
+                */
                 var downstreamAuthortityScheme = Configuration["downstreamAuthorityScheme"];
 
                 var record = (from item in openIdConnectSchemeRecordSchemeRecords

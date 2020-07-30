@@ -33,7 +33,7 @@ namespace OIDCPipeline.Core.Validation
             _oidcPipelineStore = oidcPipelineStore;
             _logger = logger;
         }
-        public async Task<TokenRequestValidationResult> ValidateRequestAsync(NameValueCollection parameters)
+        public async Task<TokenRequestValidationResult> ValidateRequestAsync(SimpleNameValueCollection parameters)
         {
             _logger.LogDebug("Start token request validation");
             _validatedRequest = new ValidatedTokenRequest
@@ -77,7 +77,7 @@ namespace OIDCPipeline.Core.Validation
             }
  
         }
-        private async Task<TokenRequestValidationResult> RunValidationAsync(Func<NameValueCollection, Task<TokenRequestValidationResult>> validationFunc, NameValueCollection parameters)
+        private async Task<TokenRequestValidationResult> RunValidationAsync(Func<SimpleNameValueCollection, Task<TokenRequestValidationResult>> validationFunc, SimpleNameValueCollection parameters)
         {
             // run standard validation
             var result = await validationFunc(parameters);
@@ -88,7 +88,7 @@ namespace OIDCPipeline.Core.Validation
             return result;
         }
 
-        private async Task<TokenRequestValidationResult> ValidateAuthorizationCodeRequestAsync(NameValueCollection parameters)
+        private async Task<TokenRequestValidationResult> ValidateAuthorizationCodeRequestAsync(SimpleNameValueCollection parameters)
         {
             _logger.LogDebug("Start validation of authorization code token request");
 

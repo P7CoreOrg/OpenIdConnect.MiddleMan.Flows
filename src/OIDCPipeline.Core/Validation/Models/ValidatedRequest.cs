@@ -13,7 +13,7 @@ namespace OIDCPipeline.Core.Validation.Models
         /// <value>
         /// The raw.
         /// </value>
-        public NameValueCollection Raw { get; set; }
+        public SimpleNameValueCollection Raw { get; set; }
         /// <summary>
         /// Gets or sets the session identifier.
         /// </summary>

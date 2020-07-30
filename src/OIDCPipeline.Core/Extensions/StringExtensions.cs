@@ -220,7 +220,7 @@ namespace OIDCPipeline.Core.Extensions
         }
 
         [DebuggerStepThrough]
-        public static NameValueCollection ReadQueryStringAsNameValueCollection(this string url)
+        public static SimpleNameValueCollection ReadQueryStringAsNameValueCollection(this string url)
         {
             if (url != null)
             {
@@ -236,7 +236,7 @@ namespace OIDCPipeline.Core.Extensions
                 }
             }
 
-            return new NameValueCollection();
+            return new SimpleNameValueCollection();
         }
 
         public static string GetOrigin(this string url)

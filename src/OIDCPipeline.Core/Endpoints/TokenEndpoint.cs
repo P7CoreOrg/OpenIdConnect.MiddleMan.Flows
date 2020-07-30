@@ -18,17 +18,20 @@ namespace OIDCPipeline.Core.Endpoints
         private OIDCPipelineOptions _options;
         private IOIDCPipelineStore _oidcPipelineStore;
         private ITokenRequestValidator _tokenRequestValidator;
+        private ISerializer _serializer;
         private ILogger<AuthorizeEndpoint> _logger;
 
         public TokenEndpoint(
             OIDCPipelineOptions options,
             IOIDCPipelineStore oidcPipelineStore,
             ITokenRequestValidator tokenRequestValidator,
+            ISerializer serializer,
             ILogger<AuthorizeEndpoint> logger)
         {
             _options = options;
             _oidcPipelineStore = oidcPipelineStore;
             _tokenRequestValidator = tokenRequestValidator;
+            _serializer = serializer;
             _logger = logger;
         }
         public async Task<IEndpointResult> ProcessAsync(HttpContext context)
@@ -36,7 +39,7 @@ namespace OIDCPipeline.Core.Endpoints
             // we only support code authorization, the rest is dropped on the floor
             try
             {
-                NameValueCollection values;
+                SimpleNameValueCollection values;
                 if (HttpMethods.IsGet(context.Request.Method))
                 {
                     values = context.Request.Query.AsNameValueCollection();
@@ -68,7 +71,7 @@ namespace OIDCPipeline.Core.Endpoints
                     AccessTokenLifetime = Convert.ToInt32(downstream.ExpiresAt),
                     Custom = downstream.Custom
                 };
-                var result = new TokenResult(tokenResponse);
+                var result = new TokenResult(tokenResponse,_serializer);
                 return result;
             }
             catch (Exception ex)

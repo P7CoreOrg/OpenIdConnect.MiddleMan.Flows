@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OIDCPipeline.Core;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
@@ -74,12 +75,12 @@ namespace OIDC.Orchestrator.Extensions
             return result;
         }
 
-        public static Dictionary<string, string> ToDictionary(this NameValueCollection collection)
+        public static Dictionary<string, string> ToDictionary(this SimpleNameValueCollection collection)
         {
             return collection.ToScrubbedDictionary();
         }
 
-        public static Dictionary<string, string> ToScrubbedDictionary(this NameValueCollection collection, params string[] nameFilter)
+        public static Dictionary<string, string> ToScrubbedDictionary(this SimpleNameValueCollection collection, params string[] nameFilter)
         {
             var dict = new Dictionary<string, string>();
 
@@ -88,7 +89,7 @@ namespace OIDC.Orchestrator.Extensions
                 return dict;
             }
 
-            foreach (string name in collection)
+            foreach (string name in collection.AllKeys)
             {
                 var value = collection.Get(name);
                 if (value != null)

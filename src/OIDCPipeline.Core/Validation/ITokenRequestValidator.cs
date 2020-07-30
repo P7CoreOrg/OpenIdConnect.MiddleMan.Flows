@@ -13,6 +13,6 @@ namespace OIDCPipeline.Core.Validation
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <returns></returns>
-        Task<TokenRequestValidationResult> ValidateRequestAsync(NameValueCollection parameters);
+        Task<TokenRequestValidationResult> ValidateRequestAsync(SimpleNameValueCollection parameters);
     }
 }

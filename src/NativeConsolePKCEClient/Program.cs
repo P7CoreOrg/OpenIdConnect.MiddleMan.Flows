@@ -53,18 +53,16 @@ namespace NativeConsolePKCEClient
 
             _oidcClient = new OidcClient(options);
 
-            var extra = new
+            Dictionary<string, string> extra = new Dictionary<string, string>
             {
-                mine_data = Guid.NewGuid().ToString()
+                ["mine_data"] = Guid.NewGuid().ToString()
             };
-            ResponseValidationResult rvr = null;
+            
+         //   ResponseValidationResult rvr = null;
             var result = await _oidcClient.LoginAsync(new LoginRequest()
             {
-                FrontChannelExtraParameters = extra,
-                OnProcessResponse = context => {
-                    rvr = context;
-                    return Task.CompletedTask;
-                }
+                FrontChannelExtraParameters = extra
+                
             });
              ShowResult(result);
             

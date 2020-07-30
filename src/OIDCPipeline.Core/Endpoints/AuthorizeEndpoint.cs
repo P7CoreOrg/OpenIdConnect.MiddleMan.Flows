@@ -69,8 +69,8 @@ namespace OIDCPipeline.Core.Endpoints
     &x-client-ver=5.4.0.0
 
                 */
-               
-                NameValueCollection values;
+
+                SimpleNameValueCollection values;
                 if (HttpMethods.IsGet(context.Request.Method))
                 {
                     values = context.Request.Query.AsNameValueCollection();

@@ -8,18 +8,21 @@ using OIDCPipeline.Core.Endpoints.ResponseHandling;
 using OIDCPipeline.Core.Extensions;
 using OIDCPipeline.Core.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace OIDCPipeline.Core.Endpoints.Results
 {
     internal class TokenResult : IEndpointResult
     {
+        private ISerializer _serializer;
+
         public TokenResponse Response { get; set; }
 
-        public TokenResult(TokenResponse response)
+        public TokenResult(TokenResponse response, ISerializer serializer)
         {
             if (response == null) throw new ArgumentNullException(nameof(response));
-
+            _serializer = serializer;
             Response = response;
         }
 
@@ -33,20 +36,12 @@ namespace OIDCPipeline.Core.Endpoints.Results
                 access_token = Response.AccessToken,
                 refresh_token = Response.RefreshToken,
                 expires_in = Response.AccessTokenLifetime,
-                token_type = OidcConstants.TokenResponse.BearerTokenType
+                token_type = OidcConstants.TokenResponse.BearerTokenType,
+                custom = Response.Custom
             };
-
-            if (Response.Custom.IsNullOrEmpty())
-            {
-                await context.Response.WriteJsonAsync(dto);
-            }
-            else
-            {
-                var jobject = ObjectSerializer.ToJObject(dto);
-                jobject.AddDictionary(Response.Custom);
-
-                await context.Response.WriteJsonAsync(jobject);
-            }
+            var json = _serializer.Serialize(dto);
+            await context.Response.WriteJsonAsync(json);
+           
         }
 
         internal class ResultDto
@@ -56,6 +51,7 @@ namespace OIDCPipeline.Core.Endpoints.Results
             public int expires_in { get; set; }
             public string token_type { get; set; }
             public string refresh_token { get; set; }
+            public Dictionary<string,object> custom { get; set; }
         }
     }
 }

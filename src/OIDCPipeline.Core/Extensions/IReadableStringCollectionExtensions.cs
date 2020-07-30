@@ -3,6 +3,7 @@
 
 
 using Microsoft.Extensions.Primitives;
+using OIDCPipeline.Core;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
@@ -15,9 +16,9 @@ namespace Microsoft.AspNetCore.Http
     internal static class IReadableStringCollectionExtensions
     {
         [DebuggerStepThrough]
-        public static NameValueCollection AsNameValueCollection(this IEnumerable<KeyValuePair<string, StringValues>> collection)
+        public static SimpleNameValueCollection AsNameValueCollection(this IEnumerable<KeyValuePair<string, StringValues>> collection)
         {
-            var nv = new NameValueCollection();
+            var nv = new SimpleNameValueCollection();
 
             foreach (var field in collection)
             {
@@ -28,9 +29,9 @@ namespace Microsoft.AspNetCore.Http
         }
 
         [DebuggerStepThrough]
-        public static NameValueCollection AsNameValueCollection(this IDictionary<string, StringValues> collection)
+        public static SimpleNameValueCollection AsNameValueCollection(this IDictionary<string, StringValues> collection)
         {
-            var nv = new NameValueCollection();
+            var nv = new SimpleNameValueCollection();
 
             foreach (var field in collection)
             {

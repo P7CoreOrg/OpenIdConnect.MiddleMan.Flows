@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NativeConsolePKCEClient
@@ -36,7 +37,7 @@ namespace NativeConsolePKCEClient
             return port;
         }
 
-        public async Task<BrowserResult> InvokeAsync(BrowserOptions options)
+        public async Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
         {
             using (var listener = new LoopbackHttpListener(Port, _path))
             {
@@ -91,5 +92,7 @@ namespace NativeConsolePKCEClient
                 }
             }
         }
+
+        
     }
 }

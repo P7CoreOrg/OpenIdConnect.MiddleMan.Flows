@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Text.Json.Serialization;
 using OIDCPipeline.Core.Validation.Models;
 
 namespace OIDCPipeline.Core.Endpoints.ResponseHandling
@@ -13,6 +14,19 @@ namespace OIDCPipeline.Core.Endpoints.ResponseHandling
         public string ExpiresAt { get; set; }
         public string LoginProvider { get; set; }
         public ValidatedAuthorizeRequest Request { get; set; }
-        public Dictionary<string, object> Custom { get; internal set; } = new Dictionary<string, object>();
+        Dictionary<string, object> _custom;
+
+        public Dictionary<string, object> Custom
+        {
+            get
+            {
+                if (_custom == null)
+                {
+                    _custom = new Dictionary<string, object>();
+                }
+                return _custom;
+            }
+            set { _custom = value; }
+        }
     }
 }
