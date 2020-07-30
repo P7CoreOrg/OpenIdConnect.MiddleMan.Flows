@@ -59,8 +59,8 @@ namespace OIDC.Orchestrator.Pages
         }
         public async Task<IActionResult> OnPostWay2(string data)
         {
-            string nonce = HttpContext.GetOIDCPipeLineKey();
-
+            string key = HttpContext.GetOIDCPipeLineKey();
+            var originalIdTokenRequest = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync(key);
             var custom = new Custom
             {
                 Name = "Bugs Bunny",
@@ -75,12 +75,13 @@ namespace OIDC.Orchestrator.Pages
             };
             var json = JsonConvert.SerializeObject(custom);
 
-            await _oidcPipelineStore.StoreDownstreamCustomDataAsync(nonce, new Dictionary<string, object> {
+            await _oidcPipelineStore.StoreDownstreamCustomDataAsync(key, new Dictionary<string, object> {
                 { "prodInstance",Guid.NewGuid()},
-                { "extraStuff",custom}
+                { "extraStuff",custom},
+                {"originalRequest" ,originalIdTokenRequest.Raw}
             });
 
-            var result = await _oidcResponseGenerator.CreateAuthorizeResponseActionResultAsync(nonce, true);
+            var result = await _oidcResponseGenerator.CreateAuthorizeResponseActionResultAsync(key, true);
             await _signInManager.SignOutAsync();// we don't want our loggin hanging around
             return result;
 
