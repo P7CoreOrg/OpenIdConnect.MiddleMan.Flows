@@ -192,7 +192,7 @@ namespace OIDC.Orchestrator
 
                 app.UseRouting();
 
-                app.UseOIDCPipelineStore();
+                app.UseOIDCPipeline();
                 app.UseAuthentication();
                 app.UseAuthorization();
                 app.UseSession();

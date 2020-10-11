@@ -84,7 +84,7 @@ namespace OIDCPipeline.Core.Extensions
             services.AddTransient<IOIDCPipelineStore, DistributedCacheOIDCPipelineStore>();
         }
 
-        public static IApplicationBuilder UseOIDCPipelineStore(this IApplicationBuilder app)
+        public static IApplicationBuilder UseOIDCPipeline(this IApplicationBuilder app)
         {
             app.UseMiddleware<OIDCPipelineMiddleware>();
             return app;
