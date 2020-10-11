@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <UserSecretsId>aspnet-OIDCOrchestratorApp-B094685B-864D-4462-A8D7-11159236249B</UserSecretsId>
+    <UserSecretsId>4541cb92-795d-4ed0-8a1c-944818fd6d94</UserSecretsId>
     <CopyRefAssembliesToPublishDirectory>false</CopyRefAssembliesToPublishDirectory>
   </PropertyGroup>
 
@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\OIDCPipeline.Core\OIDCPipeline.Core.csproj" />
+    <ProjectReference Include="..\OpenIdConnectModels\OpenIdConntectModels.csproj" />
   </ItemGroup>
 
 </Project>

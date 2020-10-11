@@ -17,6 +17,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Threading.Tasks;
 using OIDCPipeline.Core;
+using Common;
+using System.Collections.Generic;
+using OpenIdConnectModels;
+using OIDCOrchestratorApp.Discovery;
+using OIDCPipeline.Core.Extensions;
 
 namespace OIDCOrchestratorApp
 {
@@ -42,6 +47,39 @@ namespace OIDCOrchestratorApp
         {
             try
             {
+                var openIdConnectSchemeRecordSchemeRecords = new List<OpenIdConnectSchemeRecord>();
+                var section = Configuration.GetSection("openIdConnect");
+                section.Bind(openIdConnectSchemeRecordSchemeRecords);
+
+
+                section = Configuration.GetSection("oidcOptionStore");
+                var oidcSchemeRecords = new Dictionary<string, OIDCSchemeRecord>();
+                section.Bind(oidcSchemeRecords);
+                services.AddTransient<IOIDCPipelineClientStore>(sp =>
+                {
+                    return new InMemoryClientSecretStore(oidcSchemeRecords);
+                });
+                services.AddHttpClient();
+                services.AddGoogleDiscoveryCache();
+                services.AddDistributedCacheOIDCPipelineStore(options =>
+                {
+                    options.ExpirationMinutes = 30;
+                });
+                var downstreamAuthortityScheme = Configuration["downstreamAuthorityScheme"];
+
+                var record = (from item in openIdConnectSchemeRecordSchemeRecords
+                              where item.Scheme == downstreamAuthortityScheme
+                              select item).FirstOrDefault();
+
+                services.AddOIDCPipeline(options =>
+                {
+                    //     options.DownstreamAuthority = "https://accounts.google.com";
+                    options.DownstreamAuthority = record.Authority;
+                });
+
+                services.AddSingleton<IBinarySerializer, BinarySerializer>();
+                services.AddSingleton<ISerializer, Serializer>();
+                services.AddDistributedMemoryCache();
                 services.AddScoped<ISigninManager, DefaultSigninManager>();
                 services.AddDbContext<ApplicationDbContext>(config =>
                 {
@@ -78,7 +116,7 @@ namespace OIDCOrchestratorApp
 
                     options.ExpireTimeSpan = TimeSpan.FromSeconds(cookieTTL);
                     options.SlidingExpiration = true;
-                    options.Cookie.Name = $"{Configuration["applicationName"]}.AspNetCore.Identity.Application";
+                 //   options.Cookie.Name = $"{Configuration["applicationName"]}.AspNetCore.Identity.Application";
                     options.LoginPath = $"/Identity/Account/Login";
                     options.LogoutPath = $"/Identity/Account/Logout";
                     options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
@@ -121,6 +159,7 @@ namespace OIDCOrchestratorApp
                 }
                 services.AddSession(options =>
                 {
+                   // options.Cookie.Name = $"{Configuration["applicationName"]}.Session";
                     options.Cookie.IsEssential = true;
                     // Set a short timeout for easy testing.
                     options.IdleTimeout = TimeSpan.FromSeconds(cookieTTL);
@@ -170,6 +209,7 @@ namespace OIDCOrchestratorApp
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseOIDCPipeline();
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
