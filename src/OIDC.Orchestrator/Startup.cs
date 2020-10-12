@@ -45,6 +45,7 @@ namespace OIDC.Orchestrator
         {
             try
             {
+                services.AddDataProtection();
                 _logger.LogInformation($"ConfigureServices");
                 services.AddSingleton<IBinarySerializer, BinarySerializer>();
                 services.AddSingleton<ISerializer, Serializer>();
@@ -122,6 +123,7 @@ namespace OIDC.Orchestrator
                 {
                     options.Cookie.Name = $"{Configuration["applicationName"]}.AspNetCore.Identity.Application";
                 });
+                services.AddAuthentication();
                 services.AddAuthentication<ApplicationUser>(Configuration);
                 services.AddMvc()
                     .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)

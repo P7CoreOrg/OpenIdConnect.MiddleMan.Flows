@@ -25,6 +25,7 @@ namespace OIDCPipeline.Core.Endpoints
         private ISigninManager _signinManager;
         private IOIDCPipelineStore _oidcPipelineStore;
         private IAuthorizeRequestValidator _authorizeRequestValidator;
+        private IOIDCPipeLineKey _oidcPipeLineKey;
         private ILogger<AuthorizeEndpoint> _logger;
 
         public AuthorizeEndpoint(
@@ -32,12 +33,14 @@ namespace OIDCPipeline.Core.Endpoints
             ISigninManager signinManager,
             IOIDCPipelineStore oidcPipelineStore,
             IAuthorizeRequestValidator authorizeRequestValidator,
+            IOIDCPipeLineKey oidcPipeLineKey,
             ILogger<AuthorizeEndpoint> logger)
         {
             _options = options;
             _signinManager = signinManager;
             _oidcPipelineStore = oidcPipelineStore;
             _authorizeRequestValidator = authorizeRequestValidator;
+            _oidcPipeLineKey = oidcPipeLineKey;
             _logger = logger;
         }
         internal string GenerateNonce()
@@ -105,7 +108,7 @@ namespace OIDCPipeline.Core.Endpoints
                     }
                     var downstreamAuthorizationRequest = values.ToDownstreamAuthorizationRequest();
 
-                    key = context.GetOIDCPipeLineKey();
+                    key = _oidcPipeLineKey.GetOIDCPipeLineKey();
                     if (!string.IsNullOrWhiteSpace(key))
                     {
                         _logger.LogInformation($"DeleteStoredCacheAsync previouse if it exists");
@@ -129,12 +132,12 @@ namespace OIDCPipeline.Core.Endpoints
                 _logger.LogInformation($"redirecting to:{redirectUrl}");
              
 
-                return new Results.OriginalAuthorizeResult(redirectUrl,key);
+                return new Results.OriginalAuthorizeResult(_oidcPipeLineKey,redirectUrl, key);
             }
             catch (Exception ex)
             {
                 string redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookErrorRedirectUrl}";
-                return new Results.OriginalAuthorizeResult(redirectUrl, key);
+                return new Results.OriginalAuthorizeResult(_oidcPipeLineKey,redirectUrl, key);
             }
         }
          

@@ -30,6 +30,7 @@ namespace OIDC.Orchestrator.Pages
     }
     public class IndexModel : PageModel
     {
+        private IOIDCPipeLineKey _oidcPipeLineKey;
         private SignInManager<ApplicationUser> _signInManager;
         private IOIDCResponseGenerator _oidcResponseGenerator;
         private IOIDCPipelineStore _oidcPipelineStore;
@@ -37,9 +38,12 @@ namespace OIDC.Orchestrator.Pages
         private readonly ILogger<IndexModel> _logger;
 
         public IndexModel(SignInManager<ApplicationUser> signInManager,
-            IOIDCResponseGenerator oidcResponseGenerator, IOIDCPipelineStore oidcPipelineStore,
+            IOIDCPipeLineKey oidcPipeLineKey,
+            IOIDCResponseGenerator oidcResponseGenerator, 
+            IOIDCPipelineStore oidcPipelineStore,
             ILogger<IndexModel> logger)
         {
+            _oidcPipeLineKey = oidcPipeLineKey;
             _signInManager = signInManager;
             _oidcResponseGenerator = oidcResponseGenerator;
             _oidcPipelineStore = oidcPipelineStore;
@@ -51,7 +55,7 @@ namespace OIDC.Orchestrator.Pages
         {
             if (User.Identity.IsAuthenticated)
             {
-                string nonce = HttpContext.GetOIDCPipeLineKey();
+                string nonce = _oidcPipeLineKey.GetOIDCPipeLineKey();
                 IdTokenResponse = await _oidcPipelineStore.GetDownstreamIdTokenResponseAsync(nonce);
 
                 Claims = Request.HttpContext.User.Claims.ToList();
@@ -59,7 +63,7 @@ namespace OIDC.Orchestrator.Pages
         }
         public async Task<IActionResult> OnPostWay2(string data)
         {
-            string key = HttpContext.GetOIDCPipeLineKey();
+            string key = _oidcPipeLineKey.GetOIDCPipeLineKey();
             var originalIdTokenRequest = await _oidcPipelineStore.GetOriginalIdTokenRequestAsync(key);
             var custom = new Custom
             {

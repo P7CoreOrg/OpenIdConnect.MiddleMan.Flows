@@ -33,12 +33,15 @@ namespace OIDC.Orchestrator.InMemoryIdentity
     public class MyOpenIdConnectProtocolValidator : OpenIdConnectProtocolValidator
     {
         private readonly IOIDCPipelineStore _oidcPipelineStore;
-        private readonly IHttpContextAccessor _accessor;
+        private readonly IOIDCPipeLineKey _oidcPipeLineKey;
 
-        public MyOpenIdConnectProtocolValidator(IOIDCPipelineStore oidcPipelineStore, IHttpContextAccessor accessor)
+        public MyOpenIdConnectProtocolValidator(
+            IOIDCPipeLineKey oidcPipeLineKey,
+            IOIDCPipelineStore oidcPipelineStore
+            )
         {
             _oidcPipelineStore = oidcPipelineStore;
-            _accessor = accessor;
+            _oidcPipeLineKey = oidcPipeLineKey;
         }
 
         public override string GenerateNonce()
@@ -50,8 +53,8 @@ namespace OIDC.Orchestrator.InMemoryIdentity
             
 */
             var oidcPipelineStore = _oidcPipelineStore;
-            var httpContextAccessor = _accessor;
-            string nonce = httpContextAccessor.HttpContext.GetOIDCPipeLineKey();
+           
+            string nonce = _oidcPipeLineKey.GetOIDCPipeLineKey();
 
             var original = oidcPipelineStore.GetOriginalIdTokenRequestAsync(nonce).GetAwaiter().GetResult();
 
@@ -114,9 +117,10 @@ namespace OIDC.Orchestrator.InMemoryIdentity
             {
                 var scheme = record.Scheme;
                 services.AddOptions<OpenIdConnectOptions>(scheme)
-                                     .Configure<IOIDCPipelineStore, IHttpContextAccessor>((options, oidcPipelineStore, accessor) =>
+                                     .Configure<IOIDCPipeLineKey,IOIDCPipelineStore>(
+                    (options, oidcPipeLineKey, oidcPipelineStore) =>
                                      {
-                                         options.ProtocolValidator = new MyOpenIdConnectProtocolValidator(oidcPipelineStore, accessor)
+                                         options.ProtocolValidator = new MyOpenIdConnectProtocolValidator(oidcPipeLineKey,oidcPipelineStore)
                                          {
                                              RequireTimeStampInNonce = false,
                                              RequireStateValidation = false,
@@ -182,7 +186,8 @@ namespace OIDC.Orchestrator.InMemoryIdentity
                     };
                     options.Events.OnRedirectToIdentityProvider = async context =>
                     {
-                        string key = context.HttpContext.GetOIDCPipeLineKey();
+                        var oidcPipelineKey = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipeLineKey>();
+                        string key = oidcPipelineKey.GetOIDCPipeLineKey();
                         var pipeLineStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineStore>();
                         var stored = await pipeLineStore.GetOriginalIdTokenRequestAsync(key);
                         var clientSecretStore = context.HttpContext.RequestServices.GetRequiredService<IOIDCPipelineClientStore>();

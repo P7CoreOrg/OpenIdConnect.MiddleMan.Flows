@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\OIDC.Orchestrator\OIDC.Orchestrator.csproj" />
+    <ProjectReference Include="..\OIDCOrchestratorApp\OIDCOrchestratorApp.csproj" />
     <ProjectReference Include="..\OIDCPipeline.Core\OIDCPipeline.Core.csproj" />
     <ProjectReference Include="..\TestServerFixture\TestServerFixture.csproj" />
   </ItemGroup>

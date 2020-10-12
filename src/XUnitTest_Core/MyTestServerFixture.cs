@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Http;
-using OIDC.Orchestrator;
+using OIDCOrchestratorApp;
 using RichardSzalay.MockHttp;
 using TestServerFixture;
 

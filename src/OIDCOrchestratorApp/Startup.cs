@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using OpenIdConnectModels;
 using OIDCOrchestratorApp.Discovery;
 using OIDCPipeline.Core.Extensions;
+using OIDCOrchestratorApp.Extensions;
 
 namespace OIDCOrchestratorApp
 {
@@ -59,6 +60,8 @@ namespace OIDCOrchestratorApp
                 {
                     return new InMemoryClientSecretStore(oidcSchemeRecords);
                 });
+                services.AddAuthentication();
+                services.AddAuthentication<IdentityUser>(Configuration);
                 services.AddHttpClient();
                 services.AddGoogleDiscoveryCache();
                 services.AddDistributedCacheOIDCPipelineStore(options =>
@@ -151,12 +154,16 @@ namespace OIDCOrchestratorApp
                 //*********** COOKIE END **************************
                 //*************************************************
 
-                services.AddControllers();
+                services.AddControllers()
+                    .AddSessionStateTempDataProvider(); 
                 IMvcBuilder builder = services.AddRazorPages();
+                builder.AddSessionStateTempDataProvider();
                 if (HostingEnvironment.IsDevelopment())
                 {
                     builder.AddRazorRuntimeCompilation();
                 }
+
+
                 services.AddSession(options =>
                 {
                    // options.Cookie.Name = $"{Configuration["applicationName"]}.Session";

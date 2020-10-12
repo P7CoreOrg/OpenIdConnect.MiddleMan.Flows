@@ -59,6 +59,7 @@ namespace OIDCPipeline.Core.Extensions
             this IServiceCollection services, 
             Action<OIDCPipelineOptions> setupAction)
         {
+            services.AddTransient<IOIDCPipeLineKey, OIDCPipeLineKey>();
             services.AddOIDCPipelineOptions(setupAction);  // do first
             services.AddRequiredPlatformServices();
             services.AddTransient<IOIDCResponseGenerator, OIDCResponseGenerator>();

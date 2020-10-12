@@ -16,7 +16,7 @@
 
 <div class="row">
 
-    @if (signedIn)
+    @if (HttpContext.User.Identity.IsAuthenticated)
     {
         <form method="POST" class="form-horizontal">
             <button type="submit" asp-route-data="foo" asp-page-handler="Way2">Way 2</button>

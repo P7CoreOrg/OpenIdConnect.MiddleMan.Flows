@@ -12,15 +12,17 @@ namespace OIDCPipeline.Core.Endpoints.Results
      
     internal class OriginalAuthorizeResult : IEndpointResult
     {
+        private IOIDCPipeLineKey _oidcPipeLineKey;
         private string _redirectUri;
         private string _key;
 
       
 
-        public OriginalAuthorizeResult(string redirectUrl, string key)
+        public OriginalAuthorizeResult(IOIDCPipeLineKey oidcPipeLineKey, string redirectUrl, string key)
         {
-            this._redirectUri = redirectUrl;
-            this._key = key;
+            _oidcPipeLineKey = oidcPipeLineKey;
+            _redirectUri = redirectUrl;
+            _key = key;
         }
 
         public async Task ExecuteAsync(HttpContext context)
@@ -28,7 +30,7 @@ namespace OIDCPipeline.Core.Endpoints.Results
             context.Response.SetNoCache();
             if (!string.IsNullOrWhiteSpace(_key))
             {
-                context.SetOIDCPipeLineKey(_key);
+                _oidcPipeLineKey.SetOIDCPipeLineKey(_key);
             }
             context.Response.Redirect(_redirectUri);
         }
