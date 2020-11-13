@@ -2,7 +2,7 @@
 {
     public enum AuthorizeTypes
     {
-        AffirmOnly = 0,
-        Passthrough = 1
+        SubjectOnly = 0,
+        SubjectAndScopes = 1
     }
 }

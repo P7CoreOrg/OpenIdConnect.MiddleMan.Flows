@@ -39,7 +39,7 @@ namespace SampleExternalService.Controllers
                     "sample.read",
                     "sample.write"
                 },
-                AuthorizeType = AuthorizeTypes.Passthrough
+                AuthorizeType = AuthorizeTypes.SubjectAndScopes
             };
         }
         [HttpPost("authorize")]
@@ -51,7 +51,6 @@ namespace SampleExternalService.Controllers
                 Authorized = false,
                 Subject = authorizeRequest.Subject 
             };
-            // we are a passthrough controller so scopes have to be present;
             if (string.IsNullOrWhiteSpace(authorizeRequest.Subject)) 
             {
                 authorizeResponse.Error = new Error
@@ -62,7 +61,8 @@ namespace SampleExternalService.Controllers
                 return authorizeResponse;
             }
 
-            if(authorizeRequest.Scopes == null|| !authorizeRequest.Scopes.Any())
+            // we are a SubjectAndScopes controller so scopes have to be present;
+            if (authorizeRequest.Scopes == null|| !authorizeRequest.Scopes.Any())
             {
                 authorizeResponse.Error = new Error
                 {
