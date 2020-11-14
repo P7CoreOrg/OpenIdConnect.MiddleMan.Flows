@@ -5,12 +5,19 @@ namespace OIDCConsentOrchestrator.EntityFrameworkCore
 {
     public class InMemoryDbContextOptionsProvider : IDbContextOptionsProvider
     {
+        string GuidS => Guid.NewGuid().ToString();
+
+        private string DatabaseName { get; }
+
+        public InMemoryDbContextOptionsProvider()
+        {
+            DatabaseName = GuidS;
+        }
+         
         public void Configure(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+            optionsBuilder.UseInMemoryDatabase(DatabaseName);
             optionsBuilder.UseLazyLoadingProxies();
         }
-
-        
     }
 }

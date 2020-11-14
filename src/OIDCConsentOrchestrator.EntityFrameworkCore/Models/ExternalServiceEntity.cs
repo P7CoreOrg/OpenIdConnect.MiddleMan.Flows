@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public string Endpoint { get; set; }
+        public string Authority { get; set; }
     }
 
 }

@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OIDCConsentOrchestrator.Models;
+using OIDCConsentOrchestrator.Models.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static OIDCConsentOrchestrator.Models.Constants;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -28,18 +30,18 @@ namespace SampleExternalService.Controllers
         }
 
         [HttpGet(".well-known/consent-configuration")]
-        public async Task<DiscoveryDocument> GetDiscoveryDocumentAsync()
+        public async Task<ConsentDiscoveryDocument> GetDiscoveryDocumentAsync()
         {
-            return new DiscoveryDocument
+            return new ConsentDiscoveryDocument
             {
                 AuthorizeEndpoint = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/consent/authorize",
-                Scopes = new List<string> 
+                ScopesSupported = new List<string> 
                 {
                     "sample",
                     "sample.read",
                     "sample.write"
                 },
-                AuthorizeType = AuthorizeTypes.SubjectAndScopes
+                AuthorizationType = AuthorizationTypes.SubjectAndScopes
             };
         }
         [HttpPost("authorize")]

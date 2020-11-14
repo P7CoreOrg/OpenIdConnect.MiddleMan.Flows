@@ -24,13 +24,13 @@ namespace OIDCConsentOrchestrator.EntityFrameworkCore.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
+                    b.Property<string>("Authority")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("Created")
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Endpoint")
                         .HasColumnType("text");
 
                     b.Property<string>("Name")
