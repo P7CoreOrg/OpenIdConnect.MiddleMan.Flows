@@ -1,0 +1,63 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+@foreach (var item in Model.Containers)
+{
+<div class="card">
+    <div class="card-header">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Authority</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">@item.ExternalServiceEntity.Name</th>
+                    <td>@item.ExternalServiceEntity.Description</td>
+                    <td>@item.ExternalServiceEntity.Authority</td>
+                </tr>
+                 
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+ 
+            <tbody>
+                <tr>
+                    <th scope="row">@nameof(item.ConsentDiscoveryDocumentResponse.AuthorizeEndpoint)</th>
+                    <td>@item.ConsentDiscoveryDocumentResponse.AuthorizeEndpoint</td>
+                </tr>
+                <tr>
+                    <th scope="row">@nameof(item.ConsentDiscoveryDocumentResponse.AuthorizationType)</th>
+                    <td>@item.ConsentDiscoveryDocumentResponse.AuthorizationType</td>
+                </tr>
+                @foreach (var scope in item.ConsentDiscoveryDocumentResponse.ScopesSupported)
+                {
+                    <tr>
+                        <th scope="row">Supported Scope</th>
+                        <td>@scope</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+}
+ 
+
