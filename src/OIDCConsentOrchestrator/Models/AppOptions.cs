@@ -11,10 +11,12 @@ namespace OIDCConsentOrchestrator.Models
         {
             Postgres,
             CosmosDB,
-            InMemory
+            InMemory,
+            MSSQLLocalDB,
         }
         public DatabaseTypes DatabaseType { get; set; }
         public double CookieTTL { get; set; }
-        public string DownstreamAuthority { get; set; }
+        public string DownstreamAuthorityScheme { get; set; }
+    
     }
 }

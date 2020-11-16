@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OIDCConsentOrchestrator.EntityFrameworkCore;
 
 namespace OIDCConsentOrchestrator.EntityFrameworkCore.Migrations
@@ -15,33 +15,127 @@ namespace OIDCConsentOrchestrator.EntityFrameworkCore.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityByDefaultColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .UseIdentityColumns()
+                .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
+
+            modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.DownstreamOIDCConfigurationEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DownstreamOIDCConfigurations");
+                });
 
             modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.ExternalServiceEntity", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Authority")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Created")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("Updated")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
                     b.ToTable("ExternalServices");
+                });
+
+            modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.OIDCClientConfigurationEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientSecret")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DownstreamOIDCConfigurationFK")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DownstreamOIDCConfigurationFK");
+
+                    b.ToTable("OIDCClientConfigurations");
+                });
+
+            modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.RedirectUriEntity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OIDCClientConfigurationFK")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RedirectUri")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OIDCClientConfigurationFK");
+
+                    b.ToTable("RedirectUris");
+                });
+
+            modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.OIDCClientConfigurationEntity", b =>
+                {
+                    b.HasOne("OIDCConsentOrchestrator.EntityFrameworkCore.DownstreamOIDCConfigurationEntity", null)
+                        .WithMany("OIDCClientConfigurations")
+                        .HasForeignKey("DownstreamOIDCConfigurationFK");
+                });
+
+            modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.RedirectUriEntity", b =>
+                {
+                    b.HasOne("OIDCConsentOrchestrator.EntityFrameworkCore.OIDCClientConfigurationEntity", null)
+                        .WithMany("RedirectUris")
+                        .HasForeignKey("OIDCClientConfigurationFK");
+                });
+
+            modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.DownstreamOIDCConfigurationEntity", b =>
+                {
+                    b.Navigation("OIDCClientConfigurations");
+                });
+
+            modelBuilder.Entity("OIDCConsentOrchestrator.EntityFrameworkCore.OIDCClientConfigurationEntity", b =>
+                {
+                    b.Navigation("RedirectUris");
                 });
 #pragma warning restore 612, 618
         }

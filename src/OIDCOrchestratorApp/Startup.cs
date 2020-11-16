@@ -20,9 +20,10 @@ using OIDCPipeline.Core;
 using Common;
 using System.Collections.Generic;
 using OpenIdConnectModels;
-using OIDCOrchestratorApp.Discovery;
+
 using OIDCPipeline.Core.Extensions;
 using OIDCOrchestratorApp.Extensions;
+using OIDCPipeline.Core.Services;
 
 namespace OIDCOrchestratorApp
 {
@@ -70,6 +71,8 @@ namespace OIDCOrchestratorApp
                 });
                 var downstreamAuthortityScheme = Configuration["downstreamAuthorityScheme"];
 
+                services.AddSingleton<IOpenIdConnectSchemeRecords>(new InMemoryOpenIdConnectSchemeRecords(openIdConnectSchemeRecordSchemeRecords));
+
                 var record = (from item in openIdConnectSchemeRecordSchemeRecords
                               where item.Scheme == downstreamAuthortityScheme
                               select item).FirstOrDefault();
@@ -77,7 +80,7 @@ namespace OIDCOrchestratorApp
                 services.AddOIDCPipeline(options =>
                 {
                     //     options.DownstreamAuthority = "https://accounts.google.com";
-                    options.DownstreamAuthority = record.Authority;
+                    options.Scheme = downstreamAuthortityScheme;
                 });
 
                 services.AddSingleton<IBinarySerializer, BinarySerializer>();
@@ -97,6 +100,17 @@ namespace OIDCOrchestratorApp
                 services.AddScoped<IEmailSender, FakeEmailSender>();
 
                 services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, SeedSessionClaimsPrincipalFactory>();
+
+                services.AddControllers()
+                   .AddSessionStateTempDataProvider();
+                IMvcBuilder builder = services.AddRazorPages();
+                builder.AddSessionStateTempDataProvider();
+                if (HostingEnvironment.IsDevelopment())
+                {
+                    builder.AddRazorRuntimeCompilation();
+                }
+
+                #region Cookies
                 //*************************************************
                 //*********** COOKIE Start ************************
                 //*************************************************
@@ -153,17 +167,8 @@ namespace OIDCOrchestratorApp
                 //*************************************************
                 //*********** COOKIE END **************************
                 //*************************************************
-
-                services.AddControllers()
-                    .AddSessionStateTempDataProvider(); 
-                IMvcBuilder builder = services.AddRazorPages();
-                builder.AddSessionStateTempDataProvider();
-                if (HostingEnvironment.IsDevelopment())
-                {
-                    builder.AddRazorRuntimeCompilation();
-                }
-
-
+                #endregion
+                #region SESSION
                 services.AddSession(options =>
                 {
                    // options.Cookie.Name = $"{Configuration["applicationName"]}.Session";
@@ -174,6 +179,7 @@ namespace OIDCOrchestratorApp
                     options.Cookie.SameSite = SameSiteMode.None;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 });
+                #endregion
             }
             catch (Exception ex)
             {

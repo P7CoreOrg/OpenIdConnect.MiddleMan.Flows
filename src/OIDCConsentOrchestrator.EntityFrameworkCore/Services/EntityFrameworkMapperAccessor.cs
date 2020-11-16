@@ -10,6 +10,6 @@ namespace OIDCConsentOrchestrator.EntityFrameworkCore.Services
                         IEntityFrameworkMapperAccessor
     {
         public IMapper MapperOneToOne { get; set; }
-        public IMapper MapperIgnoreBase { get; set; }
+        public IMapper MapperIgnoreBaseAndForeignTables { get; set; }
     }
 }

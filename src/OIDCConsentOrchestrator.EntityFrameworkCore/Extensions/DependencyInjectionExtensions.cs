@@ -24,6 +24,12 @@ namespace OIDCConsentOrchestrator.EntityFrameworkCore.Extensions
             services.AddSingleton<IDbContextOptionsProvider, PostgresDbContextOptionsProvider>();
             return services;
         }
+        public static IServiceCollection AddMSSqlDbContextOptionsProvider(
+              this IServiceCollection services)
+        {
+            services.AddSingleton<IDbContextOptionsProvider, MSSqlDbContextOptionsProvider>();
+            return services;
+        }
         public static IServiceCollection AddInMemoryDbContextOptionsProvider(
            this IServiceCollection services)
         {
@@ -36,11 +42,11 @@ namespace OIDCConsentOrchestrator.EntityFrameworkCore.Extensions
             services.TryAddScoped<IOIDCConsentOrchestratorAdmin, OIDCConsentOrchestratorAdmin>();
             
             var mapperOneToOne = MapperConfigurationBuilder.BuidOneToOneMapper;
-            var mapperIgnoreBase = MapperConfigurationBuilder.BuidIgnoreBaseMapper;
+            var mapperIgnoreBaseAndForeignTables = MapperConfigurationBuilder.BuidIgnoreBaseAndForeignTablesMapper;
             services.AddSingleton<IEntityFrameworkMapperAccessor>(new EntityFrameworkMapperAccessor
             {
                 MapperOneToOne = mapperOneToOne,
-                MapperIgnoreBase = mapperIgnoreBase
+                MapperIgnoreBaseAndForeignTables = mapperIgnoreBaseAndForeignTables
             });
 
             services.AddDbContext<ConfigurationEntityCoreContext>((serviceProvider, optionsBuilder) => {

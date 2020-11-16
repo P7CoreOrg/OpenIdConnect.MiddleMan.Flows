@@ -1,6 +1,7 @@
 ﻿using IdentityModel.Client;
 using Microsoft.Extensions.DependencyInjection;
 using OIDCPipeline.Core.Configuration;
+using OIDCPipeline.Core.Services;
 using System;
 using System.Net.Http;
 
@@ -15,7 +16,9 @@ namespace OIDC.ReferenceWebClient.Discovery
             {
                 var factory = r.GetRequiredService<IHttpClientFactory>();
                 var options = r.GetRequiredService<OIDCPipelineOptions>();
-                return new DownstreamDiscoveryCache(options.DownstreamAuthority,
+                var openIdConnectSchemeRecords = r.GetRequiredService<IOpenIdConnectSchemeRecords>();
+                var record = openIdConnectSchemeRecords.GetOpenIdConnectSchemeRecordBySchemeAsync(options.Scheme).GetAwaiter().GetResult();
+                return new DownstreamDiscoveryCache(record.Authority,
                     () => factory.CreateClient("downstream"),
                     new DiscoveryPolicy
                     {

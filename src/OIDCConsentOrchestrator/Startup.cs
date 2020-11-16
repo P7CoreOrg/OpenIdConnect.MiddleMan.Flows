@@ -26,6 +26,12 @@ using Nito.AsyncEx;
 using OIDCConsentOrchestrator.Models.Client;
 using System.Net.Http;
 using OIDCConsentOrchestrator.Services;
+using OIDCPipeline.Core;
+using OIDCConsentOrchestrator.Authentication;
+using OIDCPipeline.Core.Extensions;
+using OIDCConsentOrchestrator.EntityFrameworkCore;
+using OIDCConsentOrchestrator.EntityFrameworkCore.Stores;
+using OIDCPipeline.Core.Services;
 
 namespace OIDCConsentOrchestrator
 {
@@ -33,6 +39,8 @@ namespace OIDCConsentOrchestrator
     {
         public IConfiguration Configuration { get; }
         public IHostEnvironment HostingEnvironment { get; }
+        public List<OpenIdConnectSchemeRecord> OpenIdConnectSchemeRecords { get; private set; }
+        public Dictionary<string, OIDCSchemeRecord> OIDCOptionStore { get; private set; }
         public AppOptions AppOptions { get; private set; }
 
         private ILogger _logger;
@@ -54,10 +62,26 @@ namespace OIDCConsentOrchestrator
         {
             try
             {
-
                 AppOptions = Configuration
-                   .GetSection("AppOptions")
-                   .Get<AppOptions>();
+                      .GetSection("AppOptions")
+                      .Get<AppOptions>();
+
+                services.Configure<DataProtectionOptions>(Configuration.GetSection("DataProtectionOptions"));
+
+                OpenIdConnectSchemeRecords = Configuration
+                  .GetSection("OpenIdConnect")
+                  .Get<List<OpenIdConnectSchemeRecord>>();
+
+                OIDCOptionStore = Configuration
+                  .GetSection("oidcOptionStore")
+                  .Get<Dictionary<string, OIDCSchemeRecord>>();
+
+                services.AddSingleton<IOIDCPipelineClientStore>(sp =>
+                {
+                    return new InMemoryClientSecretStore(OIDCOptionStore);
+                });
+       
+
 
                 services.AddHttpClient();
                 services.AddSingleton<IConsentDiscoveryCacheAccessor, ConsentDiscoveryCacheAccessor>();
@@ -69,12 +93,16 @@ namespace OIDCConsentOrchestrator
                     case AppOptions.DatabaseTypes.InMemory:
                         services.AddInMemoryDbContextOptionsProvider();
                         break;
+                    case AppOptions.DatabaseTypes.MSSQLLocalDB:
+                    //    services.AddEntityFrameworkSqlServer();
+                        services.AddMSSqlDbContextOptionsProvider();
+                        break;
                     case AppOptions.DatabaseTypes.Postgres:
-                        services.AddEntityFrameworkNpgsql();
+                    //    services.AddEntityFrameworkNpgsql();
                         services.AddPostgresDbContextOptionsProvider();
                         break;
                     case AppOptions.DatabaseTypes.CosmosDB:
-                        services.AddEntityFrameworkCosmos();
+                   //     services.AddEntityFrameworkCosmos();
                         services.AddCosmosDbContextOptionsProvider();
                         break;
                 }
@@ -87,8 +115,13 @@ namespace OIDCConsentOrchestrator
                    .GetSection("openIdConnect")
                    .Get<List<OpenIdConnectSchemeRecord>>();
 
+                services.AddSingleton<IOpenIdConnectSchemeRecords>(new InMemoryOpenIdConnectSchemeRecords(openIdConnectSchemeRecordSchemeRecords));
+
                 services.AddDistributedMemoryCache();
                 services.AddAuthentication();
+                services.AddAuthentication<IdentityUser>(OpenIdConnectSchemeRecords);
+                services.AddGoogleDiscoveryCache();
+
                 //    services.AddAuthentication<IdentityUser>(Configuration);
                 services.AddScoped<ISigninManager, DefaultSigninManager>();
                 services.AddDbContext<ApplicationDbContext>(config =>
@@ -108,6 +141,18 @@ namespace OIDCConsentOrchestrator
                 */
 
                 services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, SeedSessionClaimsPrincipalFactory>();
+
+                services.AddOIDCPipeline(options =>
+                {
+                    //     options.DownstreamAuthority = "https://accounts.google.com";
+                    options.Scheme = AppOptions.DownstreamAuthorityScheme;
+                });
+                services.AddDistributedCacheOIDCPipelineStore(options =>
+                {
+                    options.ExpirationMinutes = 30;
+                });
+                services.AddSingleton<IBinarySerializer, BinarySerializer>();
+                services.AddSingleton<ISerializer, Serializer>();
 
                 services.AddControllers()
                                    .AddSessionStateTempDataProvider();
@@ -237,20 +282,50 @@ namespace OIDCConsentOrchestrator
                         Authority = "https://localhost:9001/api/Consent"
 
                     });
+                    foreach(var item in OIDCOptionStore)
+                    {
+                        var entity = new DownstreamOIDCConfigurationEntity
+                        {
+                            Name = item.Key,
+                            OIDCClientConfigurations = new List<OIDCClientConfigurationEntity>()
+                        };
+                        foreach(var clientRecord in item.Value.ClientRecords)
+                        {
+                            var oidcClientConfigurationEntity = new OIDCClientConfigurationEntity();
+                            oidcClientConfigurationEntity.ClientId = clientRecord.Key;
+                            oidcClientConfigurationEntity.ClientSecret = clientRecord.Value.Secret;
+                            oidcClientConfigurationEntity.RedirectUris = new List<RedirectUriEntity>();
+                            foreach(var ru in clientRecord.Value.RedirectUris)
+                            {
+                                oidcClientConfigurationEntity.RedirectUris.Add(new RedirectUriEntity
+                                {
+                                    RedirectUri = ru
+                                }); 
+                            }
+                            entity.OIDCClientConfigurations.Add(oidcClientConfigurationEntity);
+                        }
+
+                        await admin.UpsertEntityAsync(entity);
+                    }
+                   
                 });
             }
 
 
-                app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseOIDCPipeline();
+            app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseMiddleware<AuthSessionValidationMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapRazorPages();
             });
         }

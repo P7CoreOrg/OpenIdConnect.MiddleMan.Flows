@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace OIDC.ReferenceWebClient.Discovery
 {
-
     internal class DownstreamDiscoveryCache : DiscoveryCache, IDownstreamDiscoveryCache
     {
 

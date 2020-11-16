@@ -120,7 +120,7 @@ namespace OIDCPipeline.Core.Validation.Default
                 return Invalid(request, OidcConstants.AuthorizeRequest.RedirectUri, $"Missing {OidcConstants.AuthorizeRequest.RedirectUri}");
             }
 
-            var clientRecord = await _clientSecretStore.FetchClientRecordAsync(request.ClientId);
+            var clientRecord = await _clientSecretStore.FetchClientRecordAsync(_options.Scheme, request.ClientId);
             if (clientRecord == null)
             {
                 _logger.LogError($"Missing {OidcConstants.AuthorizeRequest.ClientId}");

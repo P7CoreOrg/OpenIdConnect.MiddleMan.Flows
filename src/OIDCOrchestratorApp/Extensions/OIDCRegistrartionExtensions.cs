@@ -15,9 +15,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using OIDCOrchestratorApp.Extensions;
-using OIDCOrchestratorApp.Validators;
+ 
 using OIDCPipeline.Core;
 using OIDCPipeline.Core.Endpoints.ResponseHandling;
+using OIDCPipeline.Core.Validators;
 using OpenIdConnectModels;
 
 namespace OIDCOrchestratorApp.Extensions
@@ -65,7 +66,7 @@ namespace OIDCOrchestratorApp.Extensions
                                      .Configure<IOIDCPipeLineKey,IOIDCPipelineStore >(
                     (options, oidcPipeLineKey, oidcPipelineStore) =>
                                      {
-                                         options.ProtocolValidator = new MyOpenIdConnectProtocolValidator(oidcPipeLineKey, oidcPipelineStore)
+                                         options.ProtocolValidator = new OIDCPipelineOpenIdConnectProtocolValidator(oidcPipeLineKey, oidcPipelineStore)
                                          {
                                              RequireTimeStampInNonce = false,
                                              RequireStateValidation = false,
@@ -140,10 +141,12 @@ namespace OIDCOrchestratorApp.Extensions
 
                         if (stored != null)
                         {
+                            var clientRecord = await clientSecretStore.FetchClientRecordAsync(scheme,
+                                stored.ClientId);
+
                             context.ProtocolMessage.ClientId = stored.ClientId;
                             context.Options.ClientId = stored.ClientId;
-                            context.Options.ClientSecret = await clientSecretStore.FetchClientSecretAsync(scheme,
-                                stored.ClientId);
+                            context.Options.ClientSecret = clientRecord.Secret;
                             context.ProtocolMessage.State = $"{key}.";
                         }
 

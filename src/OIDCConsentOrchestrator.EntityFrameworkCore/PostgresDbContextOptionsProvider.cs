@@ -3,7 +3,6 @@ using Microsoft.Extensions.Options;
 
 namespace OIDCConsentOrchestrator.EntityFrameworkCore
 {
-    
     public class PostgresDbContextOptionsProvider : IDbContextOptionsProvider
     {
         private EntityFrameworkConnectionOptions _options;

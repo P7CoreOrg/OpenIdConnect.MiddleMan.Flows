@@ -6,5 +6,4 @@
         public string Description { get; set; }
         public string Authority { get; set; }
     }
-
 }

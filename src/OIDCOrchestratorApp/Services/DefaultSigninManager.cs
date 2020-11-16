@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using OIDCPipeline.Core;
+﻿using Common;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
 namespace OIDCOrchestratorApp.Services

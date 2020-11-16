@@ -35,7 +35,7 @@ namespace OIDCPipeline.Core.Endpoints
             if (!HttpMethods.IsGet(context.Request.Method))
             {
                 _logger.LogWarning("Discovery endpoint only supports GET requests");
-                return new StatusCodeResult(HttpStatusCode.MethodNotAllowed);
+                return new OIDCPipeline.Core.Endpoints.Results.StatusCodeResult(HttpStatusCode.MethodNotAllowed);
             }
             _logger.LogDebug("Start discovery request");
 

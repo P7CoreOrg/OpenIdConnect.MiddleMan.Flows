@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using IdentityServer4.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,6 +60,7 @@ namespace OIDCPipeline.Core.Extensions
             this IServiceCollection services, 
             Action<OIDCPipelineOptions> setupAction)
         {
+            services.TryAddTransient(typeof(ICache<>), typeof(DefaultCache<>));
             services.AddTransient<IOIDCPipeLineKey, OIDCPipeLineKey>();
             services.AddOIDCPipelineOptions(setupAction);  // do first
             services.AddRequiredPlatformServices();

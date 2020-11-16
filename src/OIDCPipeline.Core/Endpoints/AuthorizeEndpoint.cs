@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 using IdentityModel;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Http;
@@ -82,14 +83,14 @@ namespace OIDCPipeline.Core.Endpoints
                 {
                     if (!context.Request.HasFormContentType)
                     {
-                        return new StatusCodeResult((int)HttpStatusCode.UnsupportedMediaType);
+                        return new OIDCPipeline.Core.Endpoints.Results.StatusCodeResult((int)HttpStatusCode.UnsupportedMediaType);
                     }
 
                     values = context.Request.Form.AsNameValueCollection();
                 }
                 else
                 {
-                    return new StatusCodeResult((int)HttpStatusCode.MethodNotAllowed);
+                    return new OIDCPipeline.Core.Endpoints.Results.StatusCodeResult((int)HttpStatusCode.MethodNotAllowed);
                 }
                 request.Raw = values;
 

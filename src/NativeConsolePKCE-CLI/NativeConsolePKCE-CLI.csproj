@@ -31,6 +31,6 @@
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\Common3\Common3.csproj" />
   </ItemGroup>
 </Project>

@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using WebClient.Services;
-using OIDCPipeline.Core;
+using Common;
 
 namespace WebClient
 {
@@ -155,7 +155,7 @@ namespace WebClient
                    IServiceProvider serviceProvider,
                    ILogger<Startup> logger)
         {
-            if (_logger is LoggerBuffered)
+            if (_logger is Microsoft.Extensions.Logging.LoggerBuffered)
             {
                 (_logger as LoggerBuffered).CopyToLogger(logger);
             }
@@ -186,7 +186,7 @@ namespace WebClient
             app.UseSession();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseMiddleware<AuthSessionValidationMiddleware>();
+            app.UseMiddleware<Common.AuthSessionValidationMiddleware>();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

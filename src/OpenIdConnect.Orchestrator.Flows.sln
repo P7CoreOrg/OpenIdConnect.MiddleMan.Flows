@@ -23,9 +23,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NativeConsolePKCE-CLI", "Na
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{04F8B550-A81A-4282-9686-B07443085BFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OIDCOrchestratorApp", "OIDCOrchestratorApp\OIDCOrchestratorApp.csproj", "{EADFF65F-1EC2-4D91-B580-B18567B2B273}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OIDCOrchestratorApp", "OIDCOrchestratorApp\OIDCOrchestratorApp.csproj", "{EADFF65F-1EC2-4D91-B580-B18567B2B273}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{7662D092-4A80-49DB-BC42-E4962D54E3DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebClient", "WebClient\WebClient.csproj", "{7662D092-4A80-49DB-BC42-E4962D54E3DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common3", "Common3\Common3.csproj", "{F683B7CB-9567-469E-A853-ED95AA114649}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OIDCConsentOrchestrator", "OIDCConsentOrchestrator\OIDCConsentOrchestrator.csproj", "{E7CCE57F-D2E4-4E0E-B242-02D741371DB0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OIDCConsentOrchestrator.EntityFrameworkCore", "OIDCConsentOrchestrator.EntityFrameworkCore\OIDCConsentOrchestrator.EntityFrameworkCore.csproj", "{BE71E783-A39D-416D-959C-DB7BCEE1FF6C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleExternalService", "SampleExternalService\SampleExternalService.csproj", "{B461178B-898E-483F-98B4-50CC11C0FF1C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OIDCConsentOrchestrator.Models", "OIDCConsentOrchestrator.Models\OIDCConsentOrchestrator.Models.csproj", "{1B81B1E0-ED12-4D5C-A69F-0500AF5DB59C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OIDCConsentOrchestrator.AutoMapper", "OIDCConsentOrchestrator.AutoMapper\OIDCConsentOrchestrator.AutoMapper.csproj", "{A4448D76-A55F-4A9E-9941-2821870F43E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +85,30 @@ Global
 		{7662D092-4A80-49DB-BC42-E4962D54E3DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7662D092-4A80-49DB-BC42-E4962D54E3DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7662D092-4A80-49DB-BC42-E4962D54E3DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F683B7CB-9567-469E-A853-ED95AA114649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F683B7CB-9567-469E-A853-ED95AA114649}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F683B7CB-9567-469E-A853-ED95AA114649}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F683B7CB-9567-469E-A853-ED95AA114649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7CCE57F-D2E4-4E0E-B242-02D741371DB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7CCE57F-D2E4-4E0E-B242-02D741371DB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7CCE57F-D2E4-4E0E-B242-02D741371DB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7CCE57F-D2E4-4E0E-B242-02D741371DB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE71E783-A39D-416D-959C-DB7BCEE1FF6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE71E783-A39D-416D-959C-DB7BCEE1FF6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE71E783-A39D-416D-959C-DB7BCEE1FF6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE71E783-A39D-416D-959C-DB7BCEE1FF6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B461178B-898E-483F-98B4-50CC11C0FF1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B461178B-898E-483F-98B4-50CC11C0FF1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B461178B-898E-483F-98B4-50CC11C0FF1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B461178B-898E-483F-98B4-50CC11C0FF1C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B81B1E0-ED12-4D5C-A69F-0500AF5DB59C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B81B1E0-ED12-4D5C-A69F-0500AF5DB59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B81B1E0-ED12-4D5C-A69F-0500AF5DB59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B81B1E0-ED12-4D5C-A69F-0500AF5DB59C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4448D76-A55F-4A9E-9941-2821870F43E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4448D76-A55F-4A9E-9941-2821870F43E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4448D76-A55F-4A9E-9941-2821870F43E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4448D76-A55F-4A9E-9941-2821870F43E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

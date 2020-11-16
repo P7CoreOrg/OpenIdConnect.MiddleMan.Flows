@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Endpoints.ResponseHandling;
@@ -49,14 +50,14 @@ namespace OIDCPipeline.Core.Endpoints
                 {
                     if (!context.Request.HasFormContentType)
                     {
-                        return new StatusCodeResult(StatusCodes.Status415UnsupportedMediaType);
+                        return new OIDCPipeline.Core.Endpoints.Results.StatusCodeResult(StatusCodes.Status415UnsupportedMediaType);
                     }
 
                     values = context.Request.Form.AsNameValueCollection();
                 }
                 else
                 {
-                    return new StatusCodeResult((int)HttpStatusCode.MethodNotAllowed);
+                    return new OIDCPipeline.Core.Endpoints.Results.StatusCodeResult((int)HttpStatusCode.MethodNotAllowed);
                 }
                 var validatedResult = await _tokenRequestValidator.ValidateRequestAsync(values);
                 if (validatedResult.IsError)
@@ -78,7 +79,7 @@ namespace OIDCPipeline.Core.Endpoints
             catch (Exception ex)
             {
                 _logger.LogCritical(ex.Message);
-                return new Results.StatusCodeResult(StatusCodes.Status404NotFound);
+                return new OIDCPipeline.Core.Endpoints.Results.StatusCodeResult((int)StatusCodes.Status404NotFound);
             }
         }
     }
