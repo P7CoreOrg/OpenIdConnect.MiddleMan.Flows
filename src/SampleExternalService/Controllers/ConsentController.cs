@@ -21,6 +21,8 @@ namespace SampleExternalService.Controllers
         private IHttpContextAccessor _httpContextAccessor;
         private ILogger<ConsentController> _logger;
 
+        private const string ServiceName = "sample";
+        private const string ScopeBaseUrl = "https://www.samplecompanyapis.com/auth";
         public ConsentController(
             IHttpContextAccessor httpContextAccessor,
             ILogger<ConsentController> logger)
@@ -32,23 +34,25 @@ namespace SampleExternalService.Controllers
         [HttpGet(".well-known/consent-configuration")]
         public async Task<ConsentDiscoveryDocument> GetDiscoveryDocumentAsync()
         {
+           
+           
             return new ConsentDiscoveryDocument
             {
                 AuthorizeEndpoint = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/api/consent/authorize",
                 ScopesSupported = new List<string> 
                 {
-                    "sample",
-                    "sample.read",
-                    "sample.write"
+                    $"{ScopeBaseUrl}/{ServiceName}",  // full access
+                    $"{ScopeBaseUrl}/{ServiceName}.readonly",
+                    $"{ScopeBaseUrl}/{ServiceName}.modify"
                 },
                 AuthorizationType = AuthorizationTypes.SubjectAndScopes
             };
         }
         [HttpPost("authorize")]
-        public async Task<AuthorizeResponse> PostAuthorizeAsync([FromBody] AuthorizeRequest authorizeRequest)
+        public async Task<ConsentAuthorizeResponse> PostAuthorizeAsync([FromBody] ConsentAuthorizeRequest authorizeRequest)
         {
             
-            var authorizeResponse = new AuthorizeResponse
+            var authorizeResponse = new ConsentAuthorizeResponse
             {
                 Authorized = false,
                 Subject = authorizeRequest.Subject 
@@ -75,7 +79,7 @@ namespace SampleExternalService.Controllers
             }
 
             // check if user is in our database.
-            authorizeResponse.Authorized = authorizeRequest.Subject == "good";
+            authorizeResponse.Authorized = authorizeRequest.Subject == "good" || authorizeRequest.Subject == "104758924428036663951";
             if (authorizeResponse.Authorized)
             {
                 authorizeResponse.Scopes = authorizeRequest.Scopes;

@@ -77,7 +77,7 @@ namespace OIDCPipeline.Core
 
         }
 
-        public async Task StoreOriginalIdTokenRequestAsync(string id, ValidatedAuthorizeRequest request)
+        public async Task StoreOriginalAuthorizeRequestAsync(string id, ValidatedAuthorizeRequest request)
         {
             var key = OIDCPipleLineStoreUtils.GenerateOriginalIdTokenRequestKey(id);
 

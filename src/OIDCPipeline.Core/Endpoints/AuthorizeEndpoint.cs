@@ -122,7 +122,7 @@ namespace OIDCPipeline.Core.Endpoints
                   //  context.SetOIDCPipeLineKey(key);
 
                     _logger.LogInformation($"StoreOriginalIdTokenRequestAsync clientid:{downstreamAuthorizationRequest.client_id}");
-                    await _oidcPipelineStore.StoreOriginalIdTokenRequestAsync(key, result.ValidatedAuthorizeRequest);
+                    await _oidcPipelineStore.StoreOriginalAuthorizeRequestAsync(key, result.ValidatedAuthorizeRequest);
 
                     redirectUrl = $"{context.Request.Scheme}://{context.Request.Host}{_options.PostAuthorizeHookRedirectUrl}";
                 }

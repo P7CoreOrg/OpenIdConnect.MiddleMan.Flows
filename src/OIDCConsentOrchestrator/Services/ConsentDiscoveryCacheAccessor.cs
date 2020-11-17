@@ -13,8 +13,8 @@ namespace OIDCConsentOrchestrator.Services
         {
             _httpClientFactory = httpClientFactory;
             _map = new ConcurrentDictionary<string, IConsentDiscoveryCache>();
-
         }
+
         public IConsentDiscoveryCache GetConsentDiscoveryCache(ExternalServiceEntity externalServiceEntity)
         {
             IConsentDiscoveryCache value = null;

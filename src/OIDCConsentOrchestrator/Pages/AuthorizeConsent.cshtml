@@ -1,0 +1,123 @@
+﻿@page
+@model OIDCConsentOrchestrator.Pages.AuthorizeConsentModel
+@{
+}
+
+<div class="card">
+    <div class="card-header">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">@nameof(Model.NameIdentifier)</th>
+ 
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">@Model.NameIdentifier</th>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+
+            <tbody>
+                <tr>
+                    <th scope="row">@nameof(Model.NameIdentifier)</th>
+                    <td>@Model.NameIdentifier</td>
+                </tr>
+               
+                @foreach (var rawRequest in Model.OriginalAuthorizationRequest.Raw)
+                {
+                    <tr>
+                        <th scope="row">@rawRequest.Key</th>
+                        <td>@rawRequest.Value</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">@nameof(Model.NameIdentifier)</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">@Model.NameIdentifier</th>
+                </tr>
+
+            </tbody>
+        </table>
+
+
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+
+            <tbody>
+                @foreach (var container in Model.ConsentResponseContainers)
+                {
+                    <tr>
+                        <th scope="row">@nameof(container.DiscoveryDocument.AuthorizeEndpoint)</th>
+                        <td>@container.DiscoveryDocument.AuthorizeEndpoint</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">@nameof(container.Request.Subject)</th>
+                        <td>@container.Request.Subject</td>
+                    </tr>
+                    @foreach (var scope in container.Request.Scopes)
+                    {
+                        <tr>
+                            <th scope="row">scope</th>
+                            <td>@scope</td>
+                        </tr>
+                    }
+                    <tr>
+                        <th scope="row">@nameof(container.Response.Subject)</th>
+                        <td>@container.Response.Subject</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">@nameof(container.Response.Authorized)</th>
+                        <td>@container.Response.Authorized</td>
+                    </tr>
+                    @if (container.Response.Scopes != null)
+                    {
+                        @foreach (var scope in container.Request.Scopes)
+                        {
+                            <tr>
+                                <th scope="row">scope</th>
+                                <td>@scope</td>
+                            </tr>
+                        }
+                    }
+                    @if (container.Response.Error != null)
+                    {
+
+                        <tr>
+                            <th scope="row">Error.StatusCode</th>
+                            <td>@container.Response.Error.StatusCode</td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">Error.Message</th>
+                            <td>@container.Response.Error.Message</td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Common.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -85,7 +86,7 @@ namespace OIDCConsentOrchestrator.Areas.Identity.Pages.Account
 
             var externalPrincipalClaims = info.Principal.Claims.ToList();
 
-            var nameIdentifier = GetValueFromClaim(externalPrincipalClaims, ClaimTypes.NameIdentifier);
+            var nameIdentifier = externalPrincipalClaims.GetClaimsByType(ClaimTypes.NameIdentifier).FirstOrDefault().Value;
 
             await _signInManager.SignOutAsync();
 
@@ -119,15 +120,7 @@ namespace OIDCConsentOrchestrator.Areas.Identity.Pages.Account
             }
             return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
         }
-        private string GetValueFromClaim(List<Claim> claims, string type)
-        {
-            var query = from claim in claims
-                        where claim.Type == type
-                        select claim;
-            var theClaim = query.FirstOrDefault();
-            var value = theClaim?.Value;
-            return value;
-        }
+       
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
             returnUrl = returnUrl ?? Url.Content("~/");

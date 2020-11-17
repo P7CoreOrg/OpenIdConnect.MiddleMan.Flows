@@ -17,7 +17,8 @@ namespace OIDCConsentOrchestrator.Models
         }
 
         public static class AuthorizationTypes
-        {  
+        {
+            public const string Implicit = "implicit";
             public const string Subject = "subject";
             public const string SubjectAndScopes = "subject_and_scopes";
         }

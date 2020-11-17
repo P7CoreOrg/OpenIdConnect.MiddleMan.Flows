@@ -7,7 +7,7 @@ namespace OIDCPipeline.Core
 {
     public interface IOIDCPipelineStore
     {
-        Task StoreOriginalIdTokenRequestAsync(string key, ValidatedAuthorizeRequest request);
+        Task StoreOriginalAuthorizeRequestAsync(string key, ValidatedAuthorizeRequest request);
         Task<ValidatedAuthorizeRequest> GetOriginalIdTokenRequestAsync(string key);
         Task StoreDownstreamIdTokenResponseAsync(string key, DownstreamAuthorizeResponse response);
         Task StoreDownstreamCustomDataAsync(string key, Dictionary<string,object> custom);

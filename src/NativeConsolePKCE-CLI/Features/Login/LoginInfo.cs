@@ -29,6 +29,9 @@ namespace NativeConsolePKCE_CLI.Features.Login
         }
         public class Handler : IRequestHandler<Request, Response>
         {
+            private const string ServiceName = "sample";
+            private const string ScopeBaseUrl = "https://www.samplecompanyapis.com/auth";
+
             static string _clientId = "1096301616546-edbl612881t7rkpljp3qa3juminskulo.apps.googleusercontent.com";
             static string _authority = "https://localhost:6601";
 
@@ -40,17 +43,28 @@ namespace NativeConsolePKCE_CLI.Features.Login
                     var browser = new SystemBrowser(45656);
                     string redirectUri = "http://127.0.0.1:45656";
 
+                    var scopes = new[] {
+                        $"openid",
+                        $"profile",
+                        $"{ScopeBaseUrl}/{ServiceName}",
+                        $"{ScopeBaseUrl}/{ServiceName}.readonly",
+                        $"{ScopeBaseUrl}/{ServiceName}.modify",
+  
+                    };
+
+                    var scope = string.Join(" ", scopes);
                     var options = new OidcClientOptions
                     {
                         Authority = _authority,
                         ClientId = _clientId,
                         RedirectUri = redirectUri,
-                        Scope = "openid profile",
+                        Scope = scope, //"openid profile"
                         FilterClaims = false,
                         Browser = browser,
                         Flow = OidcClientOptions.AuthenticationFlow.AuthorizationCode,
                         ResponseMode = OidcClientOptions.AuthorizeResponseMode.Redirect,
                         LoadProfile = true
+                        
 
                     };
                     options.Policy.Discovery.ValidateIssuerName = false;
@@ -73,7 +87,9 @@ namespace NativeConsolePKCE_CLI.Features.Login
                     //   ResponseValidationResult rvr = null;
                     response.Result = await oidcClient.LoginAsync(new LoginRequest()
                     {
-                        FrontChannelExtraParameters = extra
+                        FrontChannelExtraParameters = extra,
+                       
+                        
                     });
 
                 }

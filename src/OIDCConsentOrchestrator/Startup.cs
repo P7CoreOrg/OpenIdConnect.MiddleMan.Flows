@@ -85,7 +85,8 @@ namespace OIDCConsentOrchestrator
 
                 services.AddHttpClient();
                 services.AddSingleton<IConsentDiscoveryCacheAccessor, ConsentDiscoveryCacheAccessor>();
-                 
+                services.AddSingleton<IConsentExternalService, ConsentExternalService>();
+ 
 
                 switch (AppOptions.DatabaseType)
                 {
@@ -278,7 +279,7 @@ namespace OIDCConsentOrchestrator
                     await admin.UpsertEntityAsync(new EntityFrameworkCore.ExternalServiceEntity
                     {
                         Description ="Sample External Service",
-                        Name="Sample External Service",
+                        Name="sample",
                         Authority = "https://localhost:9001/api/Consent"
 
                     });
