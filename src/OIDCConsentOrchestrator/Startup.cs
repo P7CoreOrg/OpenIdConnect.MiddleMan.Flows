@@ -145,8 +145,8 @@ namespace OIDCConsentOrchestrator
 
                 services.AddOIDCPipeline(options =>
                 {
-                    //     options.DownstreamAuthority = "https://accounts.google.com";
-                    options.Scheme = AppOptions.DownstreamAuthorityScheme;
+                    options.Scheme = AppOptions.DownstreamAuthorityScheme; // Google
+                    options.PostAuthorizeHookRedirectUrl = $"/Identity/Account/ExternalLogin?handler=Provider&provider={AppOptions.DownstreamAuthorityScheme}&returnUrl=/AuthorizeConsent";
                 });
                 services.AddDistributedCacheOIDCPipelineStore(options =>
                 {

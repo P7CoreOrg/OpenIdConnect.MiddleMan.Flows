@@ -60,6 +60,13 @@ namespace OIDCConsentOrchestrator.Areas.Identity.Pages.Account
             return RedirectToPage("./Login");
         }
 
+        public IActionResult OnGetProviderAsync(string provider, string returnUrl = null)
+        {
+            var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return new ChallengeResult(provider, properties);
+        }
+
         public IActionResult OnPost(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
