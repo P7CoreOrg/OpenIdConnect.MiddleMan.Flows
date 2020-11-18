@@ -38,8 +38,8 @@ namespace OIDCConsentOrchestrator.Services
             {
                 var contentStream = await httpResponse.Content.ReadAsStreamAsync();
 
-                return await System.Text.Json.JsonSerializer.DeserializeAsync<ConsentAuthorizeResponse>(contentStream, new System.Text.Json.JsonSerializerOptions { IgnoreNullValues = true, PropertyNameCaseInsensitive = true });
-                 
+                var result =  await System.Text.Json.JsonSerializer.DeserializeAsync<ConsentAuthorizeResponse>(contentStream, new System.Text.Json.JsonSerializerOptions { IgnoreNullValues = true, PropertyNameCaseInsensitive = true });
+                return result;
             }
             throw new Exception("HTTP Response was invalid and cannot be deserialised.");
         }

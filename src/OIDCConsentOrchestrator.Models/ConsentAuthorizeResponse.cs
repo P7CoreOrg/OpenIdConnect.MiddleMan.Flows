@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace OIDCConsentOrchestrator.Models
 {
+ 
     public class ConsentAuthorizeResponse: BaseResponse
     {
         [JsonPropertyName("authorized")]
@@ -12,5 +13,12 @@ namespace OIDCConsentOrchestrator.Models
         public List<string> Scopes { get; set; }
         [JsonPropertyName("subject")]
         public string Subject { get; set; }
+
+        [JsonPropertyName("claims")]
+        public List<ConsentAuthorizeClaim> Claims { get; set; }
+
+        [JsonPropertyName("custom_payload")]
+        public object CustomPayload { get; set; }
     }
+ 
 }

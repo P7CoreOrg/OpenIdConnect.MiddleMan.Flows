@@ -18,6 +18,11 @@ namespace SampleExternalService.Controllers
     [ApiController]
     public class ConsentController : ControllerBase
     {
+        public class MyCustom
+        {
+            public string Name { get; set; }
+            public int Value { get; set; }
+        }
         private IHttpContextAccessor _httpContextAccessor;
         private ILogger<ConsentController> _logger;
 
@@ -79,10 +84,19 @@ namespace SampleExternalService.Controllers
             }
 
             // check if user is in our database.
-            authorizeResponse.Authorized = authorizeRequest.Subject == "good" || authorizeRequest.Subject == "104758924428036663951";
+            authorizeResponse.Authorized = authorizeRequest.Subject == "good" || authorizeRequest.Subject == "104758924428036663951" ;
             if (authorizeResponse.Authorized)
             {
                 authorizeResponse.Scopes = authorizeRequest.Scopes;
+                authorizeResponse.Claims = new List<ConsentAuthorizeClaim>
+                {
+                    new ConsentAuthorizeClaim
+                    {
+                        Type = "geo_location",
+                        Value = "Canada"
+                    }
+                };
+                authorizeResponse.CustomPayload = new MyCustom { Name = nameof(MyCustom), Value = 1234 };
             }
             else
             {
