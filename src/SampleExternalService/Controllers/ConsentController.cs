@@ -54,7 +54,7 @@ namespace SampleExternalService.Controllers
             };
         }
         [HttpPost("authorize")]
-        public async Task<ConsentAuthorizeResponse> PostAuthorizeAsync([FromBody] ConsentAuthorizeRequest authorizeRequest)
+        public async Task<IActionResult> PostAuthorizeAsync([FromBody] ConsentAuthorizeRequest authorizeRequest)
         {
             
             var authorizeResponse = new ConsentAuthorizeResponse
@@ -69,7 +69,7 @@ namespace SampleExternalService.Controllers
                     StatusCode = (int)HttpStatusCode.BadRequest,
                     Message = "bad subject"
                 };
-                return authorizeResponse;
+                return Unauthorized(authorizeResponse); 
             }
 
             // we are a SubjectAndScopes controller so scopes have to be present;
@@ -80,7 +80,7 @@ namespace SampleExternalService.Controllers
                     StatusCode = (int)HttpStatusCode.BadRequest,
                     Message = "No scopes where requested!"
                 };
-                return authorizeResponse;
+                return Unauthorized(authorizeResponse);
             }
 
             // check if user is in our database.
@@ -106,7 +106,12 @@ namespace SampleExternalService.Controllers
                     Message = "User is bad!"
                 };
             }
-            return authorizeResponse;
+
+            if (authorizeResponse.Authorized)
+            {
+                return Ok(authorizeResponse);
+            }
+            return Unauthorized(authorizeResponse);
         }
     }
 }
