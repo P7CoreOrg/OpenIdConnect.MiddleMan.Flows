@@ -58,14 +58,14 @@ public async Task<IEndpointResult> ProcessAsync(HttpContext context)
 ## Configuration
 When we set up [google developer credentitals](https://developers.google.com/identity/protocols/OpenIDConnect) we make sure that the redirect uri points back to the **Ochestrator**.  So the client_id/client_secret belongs to the client, but the **Ochestrator** is tasked with custodial duties. 
 
-No matter what the redirect_uri whitelisted on the downstream IDP **MUST** point to the **Ochestrator**.
+No matter what, the redirect_uri whitelisted on the downstream IDP **MUST** point to the **Ochestrator**.
 
 For clients that live in hostile and untrusted environments (mobile apps), the client **MUST NOT** possess a **client_secret**.  
 Given a mobile app, lets call it **ThudApp**, it will have a **client_id/client_secret** registration unique to it on the downstream IDP and as usuall the **redirect_uri** will point to the **Orchestrator**.  The **Orchestrator** will be in possession of ThudApp's **client_id/client_secret** and **ThudApp** will only be in possession of **client_id**.
 
 **ThudApp** will only use the **code** flow, and the **Orchestrator** will lookup the incoming **client_id** and use the found **client_secret** when initiating a downstream authorization.  The **Orchestrator** can service many clients, and must be in possession of  all **client credentials**.
 
-For securet and trusted clients, like a good ole web application, the web application can still point to the **Orchestrator** as its OIDC Authority.  However in this case, the trusted app can pass allong the **client_secret**, but as usuall the **redirect_uri** must still point to the **Orchestrator**.
+For secure and trusted clients, like a good ole web application, the web application can still point to the **Orchestrator** as its OIDC Authority.  However in this case, the trusted app can pass allong the **client_secret**, but as usuall the **redirect_uri** must still point to the **Orchestrator**.
 
 The following [configuration](src/OIDC.MiddleMan/appsettings.Development.json) shows that the **Orchestrator** app is in possession of a **client_id/client_secret** that wass issued by Google.  
 
