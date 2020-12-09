@@ -65,7 +65,7 @@ namespace OIDCConsentOrchestrator.Models.Client
 
             if (!ConsentDiscoveryEndpoint.IsSecureScheme(new Uri(url), request.Policy))
             {
-                return ProtocolResponse.FromException<ConsentDiscoveryDocumentResponse>(new InvalidOperationException("HTTPS required"), $"Error connecting to {url}. HTTPS required.");
+                return ConsentProtocolResponse.FromException<ConsentDiscoveryDocumentResponse>(new InvalidOperationException("HTTPS required"), $"Error connecting to {url}. HTTPS required.");
             }
 
             try
@@ -88,17 +88,17 @@ namespace OIDCConsentOrchestrator.Models.Client
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    return await ProtocolResponse.FromHttpResponseAsync<ConsentDiscoveryDocumentResponse>(response, $"Error connecting to {url}: {response.ReasonPhrase}").ConfigureAwait();
+                    return await ConsentProtocolResponse.FromHttpResponseAsync<ConsentDiscoveryDocumentResponse>(response, $"Error connecting to {url}: {response.ReasonPhrase}").ConfigureAwait();
                 }
 
-                var disco = await ProtocolResponse.FromHttpResponseAsync<ConsentDiscoveryDocumentResponse>(response, request.Policy).ConfigureAwait();
+                var disco = await ConsentProtocolResponse.FromHttpResponseAsync<ConsentDiscoveryDocumentResponse>(response, request.Policy).ConfigureAwait();
 
                 return disco;
                 
             }
             catch (Exception ex)
             {
-                return ProtocolResponse.FromException<ConsentDiscoveryDocumentResponse>(ex, $"Error connecting to {url}. {ex.Message}.");
+                return ConsentProtocolResponse.FromException<ConsentDiscoveryDocumentResponse>(ex, $"Error connecting to {url}. {ex.Message}.");
             }
         }
     }

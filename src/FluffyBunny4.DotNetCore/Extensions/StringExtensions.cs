@@ -1,16 +1,16 @@
-﻿using System;
+﻿using FluffyBunny4.DotNetCore;
+using FluffyBunny4.DotNetCore.Extensions;
+using Microsoft.AspNetCore.WebUtilities;
+using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.WebUtilities;
 
-namespace OIDCPipeline.Core.Extensions
+namespace Microsoft.AspNetCore.Mvc
 {
-    internal static class StringExtensions
+    public static class StringExtensions
     {
         [DebuggerStepThrough]
         public static string ToSpaceSeparatedString(this IEnumerable<string> list)
@@ -54,33 +54,6 @@ namespace OIDCPipeline.Core.Extensions
             }
 
             return null;
-        }
-
-        [DebuggerStepThrough]
-        public static bool IsMissing(this string value)
-        {
-            return string.IsNullOrWhiteSpace(value);
-        }
-
-        [DebuggerStepThrough]
-        public static bool IsMissingOrTooLong(this string value, int maxLength)
-        {
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return true;
-            }
-            if (value.Length > maxLength)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        [DebuggerStepThrough]
-        public static bool IsPresent(this string value)
-        {
-            return !string.IsNullOrWhiteSpace(value);
         }
 
         [DebuggerStepThrough]
@@ -260,6 +233,32 @@ namespace OIDCPipeline.Core.Extensions
             }
 
             return null;
+        }
+
+
+        [DebuggerStepThrough]
+        public static bool IsPresent(this string value)
+        {
+            return !string.IsNullOrWhiteSpace(value);
+        }
+        [DebuggerStepThrough]
+        public static bool IsMissing(this string value)
+        {
+            return string.IsNullOrWhiteSpace(value);
+        }
+        [DebuggerStepThrough]
+        public static bool IsMissingOrTooLong(this string value, int maxLength)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return true;
+            }
+            if (value.Length > maxLength)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

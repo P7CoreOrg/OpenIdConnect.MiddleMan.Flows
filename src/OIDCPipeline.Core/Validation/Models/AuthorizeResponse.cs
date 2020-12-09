@@ -1,4 +1,5 @@
-﻿using OIDCPipeline.Core.Endpoints.ResponseHandling;
+﻿using Microsoft.AspNetCore.Mvc;
+using OIDCPipeline.Core.Endpoints.ResponseHandling;
 using OIDCPipeline.Core.Extensions;
 
 namespace OIDCPipeline.Core.Validation.Models

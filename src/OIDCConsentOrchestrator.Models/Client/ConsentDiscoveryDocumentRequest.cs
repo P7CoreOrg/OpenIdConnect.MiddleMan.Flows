@@ -1,6 +1,6 @@
 ﻿namespace OIDCConsentOrchestrator.Models.Client
 {
-    public class ConsentDiscoveryDocumentRequest: ProtocolRequest 
+    public class ConsentDiscoveryDocumentRequest: ConsentProtocolRequest 
     {
          
         /// <summary>

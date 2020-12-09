@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace OIDCConsentOrchestrator.Models.Client
 {
-    public class ConsentDiscoveryDocumentResponse: ProtocolResponse
+    public class ConsentDiscoveryDocumentResponse: ConsentProtocolResponse
     {
 
         public string AuthorizeEndpoint => TryGetString(Constants.Discovery.AuthorizationEndpoint);

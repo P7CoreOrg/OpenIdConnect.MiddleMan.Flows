@@ -39,6 +39,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OIDCConsentOrchestrator.Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OIDCConsentOrchestrator.AutoMapper", "OIDCConsentOrchestrator.AutoMapper\OIDCConsentOrchestrator.AutoMapper.csproj", "{A4448D76-A55F-4A9E-9941-2821870F43E0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityModel.FluffyBunny4", "IdentityModel.FluffyBunny4\IdentityModel.FluffyBunny4.csproj", "{EA3B4234-FDE5-473E-A97C-0537AD7D0C00}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluffyBunny4.DotNetCore", "FluffyBunny4.DotNetCore\FluffyBunny4.DotNetCore.csproj", "{B1A954A5-DABC-43D9-B72D-0EDBB88E58A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +113,14 @@ Global
 		{A4448D76-A55F-4A9E-9941-2821870F43E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4448D76-A55F-4A9E-9941-2821870F43E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4448D76-A55F-4A9E-9941-2821870F43E0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA3B4234-FDE5-473E-A97C-0537AD7D0C00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA3B4234-FDE5-473E-A97C-0537AD7D0C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA3B4234-FDE5-473E-A97C-0537AD7D0C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA3B4234-FDE5-473E-A97C-0537AD7D0C00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1A954A5-DABC-43D9-B72D-0EDBB88E58A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1A954A5-DABC-43D9-B72D-0EDBB88E58A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1A954A5-DABC-43D9-B72D-0EDBB88E58A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1A954A5-DABC-43D9-B72D-0EDBB88E58A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

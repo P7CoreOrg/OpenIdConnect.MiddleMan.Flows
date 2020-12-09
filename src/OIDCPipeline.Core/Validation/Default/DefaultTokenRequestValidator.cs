@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Text;
 using IdentityModel;
 using OIDCPipeline.Core.Endpoints.ResponseHandling;
+using FluffyBunny4.DotNetCore;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OIDCPipeline.Core.Validation
 {

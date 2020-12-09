@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\FluffyBunny4.DotNetCore\FluffyBunny4.DotNetCore.csproj" />
     <ProjectReference Include="..\OpenIdConnectModels\OpenIdConntectModels.csproj" />
   </ItemGroup>
 

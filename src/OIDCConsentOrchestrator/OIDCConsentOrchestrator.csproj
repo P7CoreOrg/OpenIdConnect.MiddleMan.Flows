@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj" />
+    <ProjectReference Include="..\IdentityModel.FluffyBunny4\IdentityModel.FluffyBunny4.csproj" />
     <ProjectReference Include="..\OIDCConsentOrchestrator.EntityFrameworkCore\OIDCConsentOrchestrator.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\OIDCConsentOrchestrator.Models\OIDCConsentOrchestrator.Models.csproj" />
     <ProjectReference Include="..\OIDCPipeline.Core\OIDCPipeline.Core.csproj" />

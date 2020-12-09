@@ -1,4 +1,5 @@
-﻿using OIDCPipeline.Core.Extensions;
+﻿using Microsoft.AspNetCore.Mvc;
+using OIDCPipeline.Core.Extensions;
 using OIDCPipeline.Core.Validation.Models;
 using System.Collections.Specialized;
 

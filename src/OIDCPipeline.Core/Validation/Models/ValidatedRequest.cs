@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using FluffyBunny4.DotNetCore;
+using System.Collections.Specialized;
 
 namespace OIDCPipeline.Core.Validation.Models
 {

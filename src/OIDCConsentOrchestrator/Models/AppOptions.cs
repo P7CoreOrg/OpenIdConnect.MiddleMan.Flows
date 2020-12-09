@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 
 namespace OIDCConsentOrchestrator.Models
 {
+
     public class AppOptions
     {
         public enum DatabaseTypes

@@ -1,5 +1,6 @@
 ﻿using IdentityModel;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using OIDCPipeline.Core.Configuration;
 using OIDCPipeline.Core.Extensions;

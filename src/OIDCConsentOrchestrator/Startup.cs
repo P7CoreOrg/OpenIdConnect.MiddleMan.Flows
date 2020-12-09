@@ -32,6 +32,9 @@ using OIDCPipeline.Core.Extensions;
 using OIDCConsentOrchestrator.EntityFrameworkCore;
 using OIDCConsentOrchestrator.EntityFrameworkCore.Stores;
 using OIDCPipeline.Core.Services;
+using IdentityModel.FluffyBunny4.Extensions;
+using FluffyBunny4.DotNetCore.Services;
+using OIDCConsentOrchestrator.Extensions;
 
 namespace OIDCConsentOrchestrator
 {
@@ -67,7 +70,9 @@ namespace OIDCConsentOrchestrator
                       .Get<AppOptions>();
 
                 services.Configure<DataProtectionOptions>(Configuration.GetSection("DataProtectionOptions"));
+                services.Configure<FluffyBunny4TokenServiceConfiguration>(Configuration.GetSection("FluffyBunny4TokenServiceConfiguration"));
 
+                
                 OpenIdConnectSchemeRecords = Configuration
                   .GetSection("OpenIdConnect")
                   .Get<List<OpenIdConnectSchemeRecord>>();
@@ -122,6 +127,7 @@ namespace OIDCConsentOrchestrator
                 services.AddAuthentication();
                 services.AddAuthentication<IdentityUser>(OpenIdConnectSchemeRecords);
                 services.AddGoogleDiscoveryCache();
+                services.AddTokenServiceDiscoveryCache();
 
                 //    services.AddAuthentication<IdentityUser>(Configuration);
                 services.AddScoped<ISigninManager, DefaultSigninManager>();
@@ -152,8 +158,7 @@ namespace OIDCConsentOrchestrator
                 {
                     options.ExpirationMinutes = 30;
                 });
-                services.AddSingleton<IBinarySerializer, BinarySerializer>();
-                services.AddSingleton<ISerializer, Serializer>();
+              
 
                 services.AddControllers()
                                    .AddSessionStateTempDataProvider();
@@ -234,6 +239,10 @@ namespace OIDCConsentOrchestrator
                     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 });
                 #endregion
+
+                services.AddFluffyBunnyTokenService();
+                services.AddSingleton<IBinarySerializer, BinarySerializer>();
+                services.AddSerializers();
             }
             catch (Exception ex)
             {

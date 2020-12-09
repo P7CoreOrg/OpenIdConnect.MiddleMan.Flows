@@ -1,4 +1,5 @@
-﻿using IdentityModel;
+﻿using FluffyBunny4.DotNetCore;
+using IdentityModel;
 using OIDCPipeline.Core.Endpoints.ResponseHandling;
 using System;
 using System.Collections.Generic;
